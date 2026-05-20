@@ -1,6 +1,14 @@
-;; CTH - change the text height of every selected TEXT/MTEXT/ATTDEF to a
-;; user-supplied value.
-;; Command: CTH
+;;-------------------=={ CTH }==------------------------------;;
+;;                                                            ;;
+;;  Change the text height of every selected TEXT / MTEXT /   ;;
+;;  ATTDEF to a user-supplied value.                          ;;
+;;------------------------------------------------------------;;
+;;  Author:  Michael Flynn                                    ;;
+;;  Version: 1.1  -  2026-05-20                               ;;
+;;  Command: CTH                                              ;;
+;;  Args:    new height, then selection                       ;;
+;;  Example: CTH -> 0.10 -> select labels -> all 0.10 tall    ;;
+;;------------------------------------------------------------;;
 
 (defun c:CTH (/ ht ss n ent edata)
   (setq ht (getreal "\nNew text height: "))

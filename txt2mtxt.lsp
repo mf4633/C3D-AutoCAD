@@ -1,6 +1,15 @@
-;; T2M - convert DTEXT/TEXT entities into MTEXT, preserving height, style,
-;; rotation, and insertion point. Original TEXT is deleted.
-;; Command: T2M
+;;-------------------=={ T2M }==------------------------------;;
+;;                                                            ;;
+;;  Convert DTEXT / TEXT entities into MTEXT, preserving      ;;
+;;  height, style, rotation, and insertion point. Original    ;;
+;;  TEXT is deleted.                                          ;;
+;;------------------------------------------------------------;;
+;;  Author:  Michael Flynn                                    ;;
+;;  Version: 1.1  -  2026-05-20                               ;;
+;;  Command: T2M                                              ;;
+;;  Args:    selection of TEXT                                ;;
+;;  Example: T2M -> select notes -> notes become MTEXT        ;;
+;;------------------------------------------------------------;;
 
 (defun c:T2M (/ ss n ent obj txt ins ht st rot)
   (vl-load-com)

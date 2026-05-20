@@ -1,6 +1,14 @@
-;; LDEL - delete every object on the layer of the picked entity.
-;; Confirmation prompt is required (defaults to NO).
-;; Command: LDEL
+;;-------------------=={ LDEL }==-----------------------------;;
+;;                                                            ;;
+;;  Delete every object on the layer of the picked entity.    ;;
+;;  Confirmation prompt is required (defaults to NO).         ;;
+;;------------------------------------------------------------;;
+;;  Author:  Michael Flynn                                    ;;
+;;  Version: 1.1  -  2026-05-20                               ;;
+;;  Command: LDEL                                             ;;
+;;  Args:    pick one object on the target layer              ;;
+;;  Example: LDEL -> pick tree -> Y -> all trees gone         ;;
+;;------------------------------------------------------------;;
 
 (defun c:LDEL (/ ent layname ss yn)
   (setq ent (car (entsel "\nPick object on the layer to wipe: ")))

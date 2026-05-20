@@ -1,5 +1,15 @@
-;; BC - count blocks in the selection (or whole drawing) grouped by block name.
-;; Command: BC
+;;-------------------=={ BC }==-------------------------------;;
+;;                                                            ;;
+;;  Count blocks in the selection (or whole drawing) grouped  ;;
+;;  by block name. Output at the command line, sorted by      ;;
+;;  block name with a total.                                  ;;
+;;------------------------------------------------------------;;
+;;  Author:  Michael Flynn                                    ;;
+;;  Version: 1.1  -  2026-05-20                               ;;
+;;  Command: BC                                               ;;
+;;  Args:    selection of INSERTs, or Enter for ALL           ;;
+;;  Example: BC -> Enter -> "TREE: 12, INLET: 4, TOTAL: 16"   ;;
+;;------------------------------------------------------------;;
 
 (defun c:BC (/ ss alist n ent name pair sorted total)
   (princ "\nSelect blocks (Enter for ALL): ")

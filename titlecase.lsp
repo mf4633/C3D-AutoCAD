@@ -1,6 +1,16 @@
-;; TITLECASE - convert selected TEXT/MTEXT To Title Case (capitalize first
-;; letter of each word; spaces, hyphens, underscores, periods are separators).
-;; Command: TITLECASE
+;;-------------------=={ TITLECASE }==------------------------;;
+;;                                                            ;;
+;;  Convert selected TEXT / MTEXT To Title Case. Capitalize   ;;
+;;  the first letter of each word; spaces, tabs, hyphens,     ;;
+;;  underscores, periods, and forward slashes are treated as  ;;
+;;  word separators.                                          ;;
+;;------------------------------------------------------------;;
+;;  Author:  Michael Flynn                                    ;;
+;;  Version: 1.1  -  2026-05-20                               ;;
+;;  Command: TITLECASE                                        ;;
+;;  Args:    selection of TEXT/MTEXT                          ;;
+;;  Example: TITLECASE -> select sheet title -> Title Case    ;;
+;;------------------------------------------------------------;;
 
 (defun tc-string (s / lst out cap c)
   (setq lst (vl-string->list s) out '() cap T)

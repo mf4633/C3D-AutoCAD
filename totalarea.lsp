@@ -1,6 +1,14 @@
-;; TOTALAREA - sum the area of selected closed entities.
-;; Reports total in sq ft and acres at the command line.
-;; Command: TOTALAREA
+;;-------------------=={ TOTALAREA }==------------------------;;
+;;                                                            ;;
+;;  Sum the area of selected closed entities. Reports the     ;;
+;;  total in sq ft and acres at the command line.             ;;
+;;------------------------------------------------------------;;
+;;  Author:  Michael Flynn                                    ;;
+;;  Version: 1.1  -  2026-05-20                               ;;
+;;  Command: TOTALAREA                                        ;;
+;;  Args:    selection of closed entities                     ;;
+;;  Example: TOTALAREA -> window basin polys -> "12.3 acres"  ;;
+;;------------------------------------------------------------;;
 
 (defun c:TOTALAREA (/ ss n ent obj nm total-sf total-ac count)
   (vl-load-com)

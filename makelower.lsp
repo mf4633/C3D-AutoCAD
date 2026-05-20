@@ -1,5 +1,14 @@
-;; MAKELOWER - convert selected TEXT/MTEXT to lowercase.
-;; Command: MAKELOWER (selection prompt; Enter for ALL text in drawing).
+;;-------------------=={ MAKELOWER }==------------------------;;
+;;                                                            ;;
+;;  Convert selected TEXT / MTEXT to lowercase. Pairs with    ;;
+;;  MAKEUPPER and TITLECASE.                                  ;;
+;;------------------------------------------------------------;;
+;;  Author:  Michael Flynn                                    ;;
+;;  Version: 1.1  -  2026-05-20                               ;;
+;;  Command: MAKELOWER                                        ;;
+;;  Args:    selection of TEXT/MTEXT, or Enter for ALL        ;;
+;;  Example: MAKELOWER -> Enter -> all drawing text lowercase ;;
+;;------------------------------------------------------------;;
 
 (defun c:MAKELOWER (/ ss n ent obj)
   (vl-load-com)

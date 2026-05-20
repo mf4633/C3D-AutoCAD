@@ -1,5 +1,15 @@
-;; GETZ - report the Z elevation of a picked object.
-;; Command: GETZ
+;;-------------------=={ GETZ }==-----------------------------;;
+;;                                                            ;;
+;;  Report the Z elevation of a picked object. Uses DXF 38    ;;
+;;  for LWPOLYLINE; otherwise the Z of the insertion point    ;;
+;;  (DXF 10).                                                 ;;
+;;------------------------------------------------------------;;
+;;  Author:  Michael Flynn                                    ;;
+;;  Version: 1.1  -  2026-05-20                               ;;
+;;  Command: GETZ                                             ;;
+;;  Args:    pick one object                                  ;;
+;;  Example: GETZ -> pick contour -> "LWPOLYLINE Z = 1023.50" ;;
+;;------------------------------------------------------------;;
 
 (defun c:GETZ (/ ent edata typ elv p10)
   (setq ent (car (entsel "\nPick object: ")))

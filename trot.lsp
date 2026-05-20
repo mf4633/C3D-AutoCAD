@@ -1,6 +1,15 @@
-;; TROT - rotate upside-down TEXT/MTEXT/ATTDEF by 180 degrees so it reads
-;; right-side up. Leaves text already between -90 and +90 untouched.
-;; Command: TROT
+;;-------------------=={ TROT }==-----------------------------;;
+;;                                                            ;;
+;;  Rotate upside-down TEXT / MTEXT / ATTDEF by 180 degrees   ;;
+;;  so it reads right-side up. Leaves text already between    ;;
+;;  -90 and +90 untouched.                                    ;;
+;;------------------------------------------------------------;;
+;;  Author:  Michael Flynn                                    ;;
+;;  Version: 1.1  -  2026-05-20                               ;;
+;;  Command: TROT                                             ;;
+;;  Args:    selection of TEXT/MTEXT/ATTDEF                   ;;
+;;  Example: TROT -> select inverted labels -> all readable   ;;
+;;------------------------------------------------------------;;
 
 (defun c:TROT (/ ss n ent dxflist rot two-pi)
   (princ "\nSelect text to make right-side up: ")

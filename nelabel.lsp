@@ -1,12 +1,20 @@
-;; NE - place a N/E coordinate label at picked points (repeating).
-;; Label is MTEXT formatted as:   N nnnn.nn
-;;                                E eeee.ee
-;; Command: NE
+;;-------------------=={ NE }==-------------------------------;;
+;;                                                            ;;
+;;  Place a N/E coordinate label at picked points (repeating  ;;
+;;  until Enter). Label is MText:                             ;;
+;;     N nnnn.nn                                              ;;
+;;     E eeee.ee                                              ;;
+;;------------------------------------------------------------;;
+;;  Author:   Michael Flynn                                   ;;
+;;  Version:  1.1  -  2026-05-20                              ;;
+;;  Command:  NE                                              ;;
+;;  Args:     pick points, Enter to quit                      ;;
+;;  Requires: _utils.lsp (c3d:txth)                           ;;
+;;  Example:  NE -> pick corner -> "N 12345.67\\PE 7890.12"   ;;
+;;------------------------------------------------------------;;
 
 (defun c:NE (/ p lbl txth)
-  (setq txth (getvar "TEXTSIZE"))
-  (if (or (null txth) (<= txth 0)) (setq txth (getvar "DIMTXT")))
-  (if (or (null txth) (<= txth 0)) (setq txth 1.0))
+  (setq txth (c3d:txth))
   (while (setq p (getpoint "\nPick point (Enter to quit): "))
     (setq lbl (strcat "N " (rtos (cadr p) 2 2)
                       "\\PE " (rtos (car p) 2 2)))

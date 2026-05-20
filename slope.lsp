@@ -1,12 +1,21 @@
-;; SLP - compute and label slope between two picked 3D points.
-;; Output: percent slope, ratio (H:V), and dv/dh values. Label placed at midpoint.
-;; Use OSNAP to nodes/intersections on contours, vertices on profiles, etc.
-;; Command: SLP
+;;-------------------=={ SLP }==------------------------------;;
+;;                                                            ;;
+;;  Compute and label slope between two picked 3D points.     ;;
+;;  Output: percent slope, ratio (H:V), and dv/dh values.     ;;
+;;  TEXT placed at midpoint. Use OSNAP to nodes on contours,  ;;
+;;  vertices on profiles, points on a TIN, etc.               ;;
+;;------------------------------------------------------------;;
+;;  Author:   Michael Flynn                                   ;;
+;;  Version:  1.1  -  2026-05-20                              ;;
+;;  Command:  SLP                                             ;;
+;;  Args:     pick two 3D points                              ;;
+;;  Requires: _utils.lsp (c3d:txth)                           ;;
+;;  Example:  SLP -> pick contour 100 -> pick contour 102     ;;
+;;            label: "2.50% (40.00:1)"                        ;;
+;;------------------------------------------------------------;;
 
 (defun c:SLP (/ p1 p2 dh dv slope-pct ratio mid lbl txth)
-  (setq txth (getvar "TEXTSIZE"))
-  (if (or (null txth) (<= txth 0)) (setq txth (getvar "DIMTXT")))
-  (if (or (null txth) (<= txth 0)) (setq txth 1.0))
+  (setq txth (c3d:txth))
   (setq p1 (getpoint "\nPick first point: "))
   (if p1 (setq p2 (getpoint p1 "\nPick second point: ")))
   (if (and p1 p2)

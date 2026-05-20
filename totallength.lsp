@@ -1,6 +1,15 @@
-;; TLEN - report total length of selected lines/polylines/arcs/circles/etc.
-;; Output in drawing units (ft) and miles.
-;; Command: TLEN
+;;-------------------=={ TLEN }==-----------------------------;;
+;;                                                            ;;
+;;  Report the total length of selected lines / polylines /   ;;
+;;  arcs / circles / ellipses / splines. Output in drawing    ;;
+;;  units (ft) and miles.                                     ;;
+;;------------------------------------------------------------;;
+;;  Author:  Michael Flynn                                    ;;
+;;  Version: 1.1  -  2026-05-20                               ;;
+;;  Command: TLEN                                             ;;
+;;  Args:    selection of linear entities                     ;;
+;;  Example: TLEN -> select pipe runs -> "1234.56 (0.234 mi)" ;;
+;;------------------------------------------------------------;;
 
 (defun c:TLEN (/ ss n ent obj total)
   (vl-load-com)

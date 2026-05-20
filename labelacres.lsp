@@ -1,18 +1,20 @@
-;; LABELACRES - label closed polylines, hatches, circles, ellipses, regions
-;; with area in acres to 0.1 ac. Label is MTEXT at the bounding-box center.
-;; Command: LABELACRES
-
-(defun bbcenter (obj / minp maxp)
-  (vla-GetBoundingBox obj 'minp 'maxp)
-  (mapcar '(lambda (a b) (/ (+ a b) 2.0))
-          (vlax-safearray->list minp)
-          (vlax-safearray->list maxp)))
+;;-------------------=={ LABELACRES }==-----------------------;;
+;;                                                            ;;
+;;  Label closed polylines / hatches / circles / ellipses /   ;;
+;;  regions with area in acres to 0.1 ac (e.g. "2.3 AC").     ;;
+;;  MText placed at the bounding-box center of each entity.   ;;
+;;------------------------------------------------------------;;
+;;  Author:   Michael Flynn                                   ;;
+;;  Version:  1.1  -  2026-05-20                              ;;
+;;  Command:  LABELACRES                                      ;;
+;;  Args:     selection of closed entities                    ;;
+;;  Requires: _utils.lsp (c3d:txth, c3d:bbcenter)             ;;
+;;  Example:  LABELACRES -> window 3 polygons -> 3 AC labels  ;;
+;;------------------------------------------------------------;;
 
 (defun c:LABELACRES (/ ss n ent obj nm area-sf area-ac center label txth count)
   (vl-load-com)
-  (setq txth (getvar "TEXTSIZE"))
-  (if (or (null txth) (<= txth 0)) (setq txth (getvar "DIMTXT")))
-  (if (or (null txth) (<= txth 0)) (setq txth 1.0))
+  (setq txth (c3d:txth))
   (princ "\nSelect closed polylines/hatches/circles/ellipses/regions: ")
   (setq ss (ssget '((0 . "LWPOLYLINE,POLYLINE,HATCH,CIRCLE,ELLIPSE,REGION,SPLINE"))))
   (setq count 0)
@@ -32,7 +34,7 @@
           (progn
             (setq area-sf (vla-get-Area obj)
                   area-ac (/ area-sf 43560.0)
-                  center  (bbcenter obj)
+                  center  (c3d:bbcenter obj)
                   label   (strcat (rtos area-ac 2 1) " AC"))
             (entmake
               (list

@@ -1,36 +1,20 @@
-;; BD - label a LINE with its surveyor bearing (N DD MM SS E/W) and length.
-;; Label is MTEXT placed at midpoint, rotated to the line and flipped if
-;; upside-down so it always reads left-to-right.
-;; Command: BD
-
-(defun rad->dms (rad / d m s deg)
-  (setq deg (* (/ rad pi) 180.0)
-        d   (fix deg)
-        m   (* (- deg d) 60.0)
-        s   (* (- m (fix m)) 60.0)
-        m   (fix m)
-        s   (atof (rtos s 2 0)))
-  (if (>= s 60) (progn (setq s 0)   (setq m (1+ m))))
-  (if (>= m 60) (progn (setq m 0)   (setq d (1+ d))))
-  (strcat (itoa d) "%%d"
-          (if (< m 10) "0" "") (itoa m) "'"
-          (if (< s 10) "0" "") (itoa (fix s)) "\""))
-
-(defun az->bearing (az / pi2 ns ew theta)
-  (setq pi2 (* 2 pi)
-        az  (rem az pi2))
-  (if (< az 0) (setq az (+ az pi2)))
-  (cond
-    ((<= az (/ pi 2))           (setq ns "N" ew "E" theta az))
-    ((<= az pi)                 (setq ns "S" ew "E" theta (- pi az)))
-    ((<= az (* 3 (/ pi 2)))     (setq ns "S" ew "W" theta (- az pi)))
-    (T                          (setq ns "N" ew "W" theta (- pi2 az))))
-  (strcat ns " " (rad->dms theta) " " ew))
+;;-------------------=={ BD }==-------------------------------;;
+;;                                                            ;;
+;;  Label a LINE with its surveyor bearing                    ;;
+;;  (N DD%%dMM'SS" E/W) and length. MText placed at midpoint, ;;
+;;  rotated along the line and flipped if upside-down so it   ;;
+;;  always reads left-to-right.                               ;;
+;;------------------------------------------------------------;;
+;;  Author:   Michael Flynn                                   ;;
+;;  Version:  1.1  -  2026-05-20                              ;;
+;;  Command:  BD                                              ;;
+;;  Args:     pick a LINE                                     ;;
+;;  Requires: _utils.lsp (c3d:txth, c3d:az->bearing)          ;;
+;;  Example:  BD -> pick line -> "N 12%%d34'56" E\\P125.43'"  ;;
+;;------------------------------------------------------------;;
 
 (defun c:BD (/ ent edata p1 p2 math-ang az dist mid bear lbl rot txth)
-  (setq txth (getvar "TEXTSIZE"))
-  (if (or (null txth) (<= txth 0)) (setq txth (getvar "DIMTXT")))
-  (if (or (null txth) (<= txth 0)) (setq txth 1.0))
+  (setq txth (c3d:txth))
   (setq ent (car (entsel "\nPick a LINE: ")))
   (if ent
     (progn
@@ -43,7 +27,7 @@
                 az   (- (/ pi 2) math-ang)
                 dist (distance p1 p2)
                 mid  (mapcar '(lambda (a b) (/ (+ a b) 2.0)) p1 p2)
-                bear (az->bearing az)
+                bear (c3d:az->bearing az)
                 lbl  (strcat bear "\\P" (rtos dist 2 2) "'")
                 rot  math-ang)
           (if (and (> rot (/ pi 2)) (< rot (* 3 (/ pi 2))))

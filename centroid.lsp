@@ -1,12 +1,16 @@
-;; CENTROID - place a POINT at the bounding-box center of a picked closed
-;; polyline / hatch / circle / ellipse / region. Useful for labels and pivots.
-;; Command: CENTROID
-
-(defun bbcenter (obj / minp maxp)
-  (vla-GetBoundingBox obj 'minp 'maxp)
-  (mapcar '(lambda (a b) (/ (+ a b) 2.0))
-          (vlax-safearray->list minp)
-          (vlax-safearray->list maxp)))
+;;-------------------=={ CENTROID }==-------------------------;;
+;;                                                            ;;
+;;  Place a POINT at the bounding-box center of a picked      ;;
+;;  closed polyline / hatch / circle / ellipse / region.      ;;
+;;  Useful as a label anchor or block pivot.                  ;;
+;;------------------------------------------------------------;;
+;;  Author:   Michael Flynn                                   ;;
+;;  Version:  1.1  -  2026-05-20                              ;;
+;;  Command:  CENTROID                                        ;;
+;;  Args:     pick one closed entity                          ;;
+;;  Requires: _utils.lsp (c3d:bbcenter)                       ;;
+;;  Example:  CENTROID -> pick polygon -> POINT at bbox ctr   ;;
+;;------------------------------------------------------------;;
 
 (defun c:CENTROID (/ ent obj cen)
   (vl-load-com)
@@ -14,7 +18,7 @@
   (if ent
     (progn
       (setq obj (vlax-ename->vla-object ent)
-            cen (bbcenter obj))
+            cen (c3d:bbcenter obj))
       (entmake (list '(0 . "POINT") (cons 10 cen)))
       (princ (strcat "\nCentroid at "
                      (rtos (car cen) 2 4) ", "

@@ -1,8 +1,16 @@
-;; FLAT - flatten selected objects to Z=0 in place.
-;; Handles LINE, ARC, CIRCLE, TEXT, MTEXT, INSERT (any 3D-point DXF group)
-;; plus LWPOLYLINE elevation (DXF 38).
-;; For 3DPOLY/3DFACE/MESH/SURFACE, explode first.
-;; Command: FLAT
+;;-------------------=={ FLAT }==-----------------------------;;
+;;                                                            ;;
+;;  Flatten selected objects to Z=0 in place. Handles LINE,   ;;
+;;  ARC, CIRCLE, TEXT, MTEXT, INSERT (any 3D-point DXF group) ;;
+;;  plus LWPOLYLINE elevation (DXF 38) and thickness (DXF 39).;;
+;;  For 3DPOLY / 3DFACE / MESH / SURFACE, explode first.      ;;
+;;------------------------------------------------------------;;
+;;  Author:  Michael Flynn                                    ;;
+;;  Version: 1.1  -  2026-05-20                               ;;
+;;  Command: FLAT                                             ;;
+;;  Args:    selection, or Enter for ALL                      ;;
+;;  Example: FLAT -> Enter -> everything sits at Z=0          ;;
+;;------------------------------------------------------------;;
 
 (defun c:FLAT (/ ss n ent dxflist newlist)
   (princ "\nSelect objects to flatten to Z=0 (Enter for ALL): ")
