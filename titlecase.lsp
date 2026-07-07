@@ -5,11 +5,12 @@
 ;;  underscores, periods, and forward slashes are treated as  ;;
 ;;  word separators.                                          ;;
 ;;------------------------------------------------------------;;
-;;  Author:  Michael Flynn                                    ;;
-;;  Version: 1.1  -  2026-05-20                               ;;
-;;  Command: TITLECASE                                        ;;
-;;  Args:    selection of TEXT/MTEXT                          ;;
-;;  Example: TITLECASE -> select sheet title -> Title Case    ;;
+;;  Author:   Michael Flynn                                   ;;
+;;  Version:  1.2  -  2026-07-07                              ;;
+;;  Command:  TITLECASE                                       ;;
+;;  Args:     selection of TEXT/MTEXT                         ;;
+;;  Requires: _utils.lsp (c3d:mtext-case, for MTEXT)          ;;
+;;  Example:  TITLECASE -> select sheet title -> Title Case   ;;
 ;;------------------------------------------------------------;;
 
 (defun tc-string (s / lst out cap c)
@@ -36,7 +37,12 @@
       (repeat (sslength ss)
         (setq ent (ssname ss n)
               obj (vlax-ename->vla-object ent))
-        (vla-put-TextString obj (tc-string (vla-get-TextString obj)))
+        ;; MTEXT carries inline format codes; c3d:mtext-case skips them.
+        ;; Plain TEXT has none, so tc-string (which treats every char as
+        ;; visible, incl. backslashes) is the right tool there.
+        (if (= (vla-get-ObjectName obj) "AcDbMText")
+          (vla-put-TextString obj (c3d:mtext-case (vla-get-TextString obj) 'title))
+          (vla-put-TextString obj (tc-string (vla-get-TextString obj))))
         (setq n (1+ n)))
       (princ (strcat "\nTitle-cased " (itoa (sslength ss)) " text object(s)."))))
   (princ))

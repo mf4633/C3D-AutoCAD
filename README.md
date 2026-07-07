@@ -90,7 +90,7 @@ All routines: pure AutoLISP / VLISP. No DLLs, no .NET, no Dynamo. Works in vanil
 - `BD` and `BDTBL` write bearings using the AutoCAD `%%d` degree code so labels are portable to any font.
 - `TLEN` measures every curve type (including ellipses and splines) via `vlax-curve-getDistAtParam`, so odd geometry is counted, not silently skipped.
 - `PLT` requires the drawing to be saved (writes the PDF next to the DWG). It publishes each layout through that layout's page setup, so set page size / scale / plot area and a PDF plotter (e.g. "DWG To PDF.pc3") on each layout first.
-- `MAKEUPPER` / `MAKELOWER` / `TITLECASE` change the raw text string. On MTEXT with inline formatting codes (`\P`, `\C1;`, `{\fArial|b1;…}`) the case fold also touches the codes — use on plain text, or check formatted MTEXT afterward.
+- `MAKEUPPER` / `MAKELOWER` / `TITLECASE` case-fold only the **visible** text of MTEXT — inline formatting codes (`\P`, `\C1;`, `\H2x;`, `{\fArial|b1;…}`) and grouping braces are left intact (via `c3d:mtext-case`). Stacked-fraction content (`\S…;`) is left as-is. Plain TEXT/ATTDEF use the built-in fold.
 - `LDEL` skips locked layers (AutoCAD `ERASE` silently ignores them); unlock the layer first.
 
 ## Contributing
