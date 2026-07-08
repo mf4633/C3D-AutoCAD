@@ -3,6 +3,33 @@
 All notable changes to this project will be documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- `c3d:mtext-case` in `_utils.lsp` — case-folds only the visible text of an
+  MTEXT string, leaving inline format codes (`\P`, `\C1;`, `\fArial|…;`, `\H2x;`,
+  grouping braces, stacked fractions) untouched.
+
+### Fixed
+- `MAKEUPPER` / `MAKELOWER` / `TITLECASE` corrupted MTEXT inline formatting by
+  case-folding the format codes along with the text. They now route MTEXT
+  through `c3d:mtext-case`; plain TEXT/ATTDEF keep the simple fold (so a literal
+  backslash in a path is not mistaken for a code).
+- `PLT` no longer overwrote the same PDF once per layout (leaving only the last
+  layout, and prompting on overwrite). It now writes a DSD and runs `-PUBLISH`
+  headlessly to collate every layout into one multi-page PDF, and reports a
+  clear error if publishing fails.
+- `TLEN` undercounted: `ELLIPSE` and `SPLINE` expose none of the probed VLA
+  length properties and silently contributed 0. Length is now measured with
+  `vlax-curve-getDistAtParam`, which is correct for every curve type.
+- `LDEL` reported "Deleted N object(s)" even when the layer was locked and
+  `ERASE` removed nothing. It now detects a locked layer and warns instead.
+
+### Changed
+- `BDTBL` no longer aborts via `(exit)` (which prints `; error: quit / exit
+  abort`) on cancel / wrong pick — it bails cleanly with a message.
+- README notes document the `TLEN`, `PLT`, text-case, and `LDEL` behavior above.
+
 ## [1.1.0] - 2026-05-20
 
 ### Added

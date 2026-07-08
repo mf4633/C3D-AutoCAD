@@ -11,7 +11,7 @@
 ;;  metes-and-bounds work.                                    ;;
 ;;------------------------------------------------------------;;
 ;;  Author:   Michael Flynn                                   ;;
-;;  Version:  1.0  -  2026-05-20                              ;;
+;;  Version:  1.1  -  2026-07-07                              ;;
 ;;  Command:  BDTBL                                           ;;
 ;;  Args:     pick a polyline, then an insertion point        ;;
 ;;  Requires: _utils.lsp (c3d:az->bearing)                    ;;
@@ -19,16 +19,22 @@
 ;;            -> 3-column table inserted                      ;;
 ;;------------------------------------------------------------;;
 
-(defun c:BDTBL (/ ent obj ins doc space tbl rows nv i p1 p2 az dist bear
-                  th param-1 param-2 seg-type)
+(defun c:BDTBL (/ ent ins)
   (vl-load-com)
   (setq ent (car (entsel "\nPick polyline for bearings table: ")))
-  (if (null ent) (exit))
-  (if (not (member (cdr (assoc 0 (entget ent)))
-                   '("LWPOLYLINE" "POLYLINE")))
-    (progn (princ "\nNot a polyline.") (exit)))
-  (setq ins (getpoint "\nInsertion point for table: "))
-  (if (null ins) (exit))
+  (cond
+    ((null ent)
+     (princ "\nNothing picked."))
+    ((not (member (cdr (assoc 0 (entget ent))) '("LWPOLYLINE" "POLYLINE")))
+     (princ "\nNot a polyline."))
+    ((null (setq ins (getpoint "\nInsertion point for table: ")))
+     (princ "\nNo insertion point."))
+    (T
+     (bdtbl:build ent ins)))
+  (princ))
+
+;; Build the bearings-and-distances table for polyline ENT at point INS.
+(defun bdtbl:build (ent ins / obj doc space tbl rows nv i p1 p2 az dist bear th)
   (setq obj   (vlax-ename->vla-object ent)
         nv    (fix (1+ (vlax-curve-getEndParam obj)))
         rows  '()
