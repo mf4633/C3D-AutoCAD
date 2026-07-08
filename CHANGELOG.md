@@ -3,7 +3,7 @@
 All notable changes to this project will be documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.1.1] - 2026-07-08
 
 ### Added
 - `c3d:mtext-case` in `_utils.lsp` — case-folds only the visible text of an
