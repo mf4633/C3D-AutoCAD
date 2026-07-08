@@ -3,6 +3,14 @@
 All notable changes to this project will be documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+- `BC` counted dynamic and anonymous block inserts under their internal
+  `*U###` names, scattering one logical block across many aliases. It now reads
+  `EffectiveName` (falling back to DXF 2) so instances group under the real
+  block name.
+
 ## [1.1.1] - 2026-07-08
 
 ### Added
