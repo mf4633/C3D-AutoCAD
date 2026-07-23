@@ -201,9 +201,17 @@ Do **not** claim COGO alignment / parcel fabric integration you don't have.
 
 ## Pre-submission test matrix
 
+Bundle is already staged at `%ProgramData%\Autodesk\ApplicationPlugins\C3DFieldKit.bundle`
+(2026-07-23) — the same path the installer targets. Restart Civil 3D to test.
+Run the matrix against **2023 and 2026**, the two installed endpoints of the
+declared range.
+
 | Test | Pass criteria |
 |------|---------------|
 | Fresh Win 11 + C3D 2026 | Installer completes without errors |
+| **CUIX loads** | "C3D Field Kit" tab appears; 26 buttons in 3 rows; no missing-CUIX error on startup |
+| **Macro fires** | Clicking Label Acres runs `LABELACRES` (proves `MacroID` binding survived the save) |
+| **Schema migration** | CUIX authored against the 2023 assembly loads clean in 2026 |
 | First launch | Ribbon panel visible; no missing CUIX |
 | `LABELACRES` on closed poly | Acres label at bbox center |
 | `BDTBL` on lot polyline | Table inserts with bearings |
@@ -236,8 +244,13 @@ Do **not** claim COGO alignment / parcel fabric integration you don't have.
       asks for that placement.
 - [x] ~~Verify `SeriesMin`/`SeriesMax` release codes~~ — done 2026-07-23.
       Map: `R24.2`=2023, `R24.3`=2024, `R25.0`=2025, `R25.1`=2026, `R26.0`=2027.
-      The draft's `R24.2`–`R25.1` claimed 2023–2026, contradicting the 2025–2027
-      test matrix; now set to `R25.0`–`R26.0`. Widen only after testing older releases.
+      **Set to `R24.2`–`R25.1` (Civil 3D 2023–2026)**, chosen from what is
+      installed and therefore testable: Civil 3D **2021, 2022, 2023, 2026**.
+      Neither 2025 nor 2027 exists on this machine, so the blueprint's original
+      "test on 2025/2026/2027" matrix was aspirational — declaring it would have
+      meant claiming three releases while being able to test one. Endpoints 2023
+      and 2026 are both exercisable; 2024/2025 are bracketed but untested, which
+      is defensible for pure AutoLISP with no version-specific API calls.
 - [ ] Record 90s demo video for listing
 - [ ] Test on Civil 3D 2025, 2026, 2027
 - [ ] Marketplace marketing copy + screenshots

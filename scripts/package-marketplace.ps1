@@ -3,9 +3,14 @@
 #
 # Release-code map (verified 2026-07-23 against Autodesk's release-vs-year note):
 #   R24.2 = 2023   R24.3 = 2024   R25.0 = 2025   R25.1 = 2026   R26.0 = 2027
-# SeriesMin/Max below declare 2025-2027 to match the pre-submission test matrix.
-# Widen only after actually testing the older releases -- the LISP is plain
-# AutoLISP and will very likely run on 2023/2024, but "likely" is not "tested".
+# SeriesMin/Max declare R24.2-R25.1 = Civil 3D 2023-2026. That range is chosen
+# from what is INSTALLED and therefore testable on this machine: Civil 3D 2021,
+# 2022, 2023, 2026. Both endpoints (2023, 2026) can be exercised; 2024 and 2025
+# are bracketed but not installed, which is defensible for pure AutoLISP with no
+# version-specific API calls -- but it IS an assumption, so say so if asked.
+# The blueprint's original "test on 2025/2026/2027" matrix was aspirational:
+# neither 2025 nor 2027 exists here, so declaring that range would have meant
+# claiming three versions while being able to test exactly one.
 #
 # ProductCode / UpgradeCode below are real v4 GUIDs (generated 2026-07-23,
 # replacing hand-typed placeholders). UpgradeCode must NEVER change across
@@ -135,7 +140,7 @@ $xml = @"
   OnlineDocumentationLink="https://github.com/mf4633/C3D-AutoCAD"
   Icon="./Resources/icon.png">
   <CompanyDetails Name="Michael Flynn, PE" Url="https://hydrocomplete.com" Email="support@hydrocomplete.com" />
-  <RuntimeRequirements OS="Win64" Platform="AutoCAD*" SeriesMin="R25.0" SeriesMax="R26.0" />
+  <RuntimeRequirements OS="Win64" Platform="AutoCAD*" SeriesMin="R24.2" SeriesMax="R25.1" />
   <Components Description="C3D Field Kit commands">
 $($entries -join "")
 $cuixEntry
