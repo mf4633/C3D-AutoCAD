@@ -75,6 +75,11 @@ $Panels = @(
         @{ Cmd='PLT'; Label='Plot All PDF' }
         @{ Cmd='PA';  Label='Purge All' }
         @{ Cmd='ZO';  Label='Zoom Objects' }
+    )},
+    # Publisher attribution. Sits last so it lands at the right end of the tab,
+    # and the panel title itself carries the HydroComplete name.
+    @{ Name = 'HydroComplete'; Cmds = @(
+        @{ Cmd='FIELDKIT'; Label='About' }
     )}
 )
 
@@ -190,13 +195,13 @@ $maxPerRow = ($rows | ForEach-Object { $_.Items.Count } | Measure-Object -Maximu
 $expPanel = $Panels.Count
 Write-Host "Wrote $OutFile"
 Write-Host ("  size:          {0:N0} bytes" -f (Get-Item $OutFile).Length)
-Write-Host "  macros:        $nMacro (expect 26)"
+Write-Host "  macros:        $nMacro (expect 27)"
 Write-Host "  panels:        $nPanel (expect $expPanel)"
 Write-Host "  panel refs:    $nRef (expect $expPanel)"
 Write-Host "  rows:          $nRow"
-Write-Host "  buttons:       $nBtn (expect 26)"
+Write-Host "  buttons:       $nBtn (expect 27)"
 Write-Host "  max btns/row:  $maxPerRow (must be <= 3, the whole point of this rewrite)"
-if ($nMacro -ne 26 -or $nBtn -ne 26 -or $nPanel -ne $expPanel -or $nTab -ne 1 -or $nRef -ne $expPanel) {
+if ($nMacro -ne 27 -or $nBtn -ne 27 -or $nPanel -ne $expPanel -or $nTab -ne 1 -or $nRef -ne $expPanel) {
     throw "Verification FAILED -- counts do not match."
 }
 if ($maxPerRow -gt 3) { throw "Verification FAILED -- a row has $maxPerRow buttons; panel will truncate again." }

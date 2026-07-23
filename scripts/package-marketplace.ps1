@@ -69,6 +69,9 @@ $Commands = [ordered]@{
     PA         = @{ File = "purgeall.lsp";   Label = "Purge All" }
     PLT        = @{ File = "plot.lsp";        Label = "Plot All PDF" }
     ZO         = @{ File = "zoomobj.lsp";    Label = "Zoom Objects" }
+    # Not a drafting macro -- about/support entry point. Product branding stays
+    # "26 LISP macros"; this is the 27th command but the 26th macro.
+    FIELDKIT   = @{ File = "fieldkit.lsp";   Label = "About Field Kit" }
 }
 
 function New-Directory([string]$Path) {
@@ -177,7 +180,7 @@ $xmlPath = Join-Path $OutBundle "PackageContents.xml"
 $lspCount = (Get-ChildItem $Contents -Filter "*.lsp").Count
 Write-Host "Built bundle -> $OutBundle"
 Write-Host "  LISP files in Contents: $lspCount"
-Write-Host "  Commands in PackageContents.xml: $($Commands.Count)"
+Write-Host "  Commands in PackageContents.xml: $($Commands.Count) (26 macros + FIELDKIT about)"
 Write-Host ""
 Write-Host "Local test: copy bundle to"
 Write-Host "  $env:ProgramData\Autodesk\ApplicationPlugins\C3DFieldKit.bundle"
