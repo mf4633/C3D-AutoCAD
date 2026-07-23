@@ -10,7 +10,9 @@
   (if (and utils (findfile utils))
     (progn
       (load utils)
-      (princ "\nC3D Field Kit: helpers loaded."))
+      ;; Single-line load banner. Keep it to ONE line -- plugins that chatter on
+      ;; every drawing open get flagged in review and annoy users.
+      (princ "\nC3D Field Kit loaded — by HydroComplete (hydrocomplete.com/civil3d)"))
     (princ "\nC3D Field Kit: _utils.lsp not found.")))
 (c3dfieldkit:load-utils)
 (princ)

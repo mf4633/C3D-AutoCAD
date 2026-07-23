@@ -153,13 +153,13 @@ $xml = @"
 <?xml version="1.0" encoding="utf-8"?>
 <ApplicationPackage SchemaVersion="1.0"
   Name="C3D Field Kit"
-  Description="26 production LISP macros for Civil 3D: parcel labels, bearings tables, survey labels, text tools, layers, plot-all-PDF."
+  Description="26 production LISP macros for Civil 3D: parcel labels, bearings tables, survey labels, text tools, layers, plot-all-PDF. By the team behind HydroComplete (hydrocomplete.com/civil3d)."
   AppVersion="1.0.0"
   ProductCode="{717A5504-F411-4AF2-B1BD-245343975734}"
   UpgradeCode="{B7F2EEBD-775E-48E0-9F93-69C87DD17AA5}"
   Author="Michael Flynn, PE"
   HelpFile="./Help/quickstart.html"
-  OnlineDocumentation="https://github.com/mf4633/C3D-AutoCAD"
+  OnlineDocumentation="https://hydrocomplete.com/civil3d"
   Icon="./Resources/icon.png">
   <CompanyDetails Name="Michael Flynn, PE" Url="https://hydrocomplete.com" Email="support@hydrocomplete.com" />
   <Components Description="C3D Field Kit commands">
