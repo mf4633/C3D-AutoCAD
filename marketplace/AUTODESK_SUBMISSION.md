@@ -222,7 +222,18 @@ Do **not** claim COGO alignment / parcel fabric integration you don't have.
       icons generated 2026-07-23, in `marketplace/C3DFieldKit.bundle/Resources/`
       and copied into the shipping bundle. Replace with commissioned art anytime
       and re-run `scripts/package-marketplace.ps1`.
-- [ ] Build `C3DFieldKit.cuix` in CUI Editor (requires a Civil 3D session)
+- [x] ~~Build `C3DFieldKit.cuix` in CUI Editor~~ — generated 2026-07-23 by
+      `scripts/build-cuix.ps1`, which drives `AcCui.dll` out-of-process instead
+      of using the CUI dialog. Verified by reopening through the same API:
+      26 macros, 1 panel, 3 rows, 1 tab, 26 buttons.
+      **Structurally valid but NOT yet loaded in Civil 3D** — panel rendering,
+      macros actually firing, and the 2023→2026 schema migration are all
+      unverified. Confirm on first launch.
+      Deviation: it builds a dedicated "C3D Field Kit" tab
+      (`WorkspaceBehavior=MergeOrAddTab`) rather than a panel on the Plug-Ins
+      tab, because merging into ACAD's base workspace from a standalone
+      generator is fragile. Drag it to Plug-Ins in the CUI editor if review
+      asks for that placement.
 - [x] ~~Verify `SeriesMin`/`SeriesMax` release codes~~ — done 2026-07-23.
       Map: `R24.2`=2023, `R24.3`=2024, `R25.0`=2025, `R25.1`=2026, `R26.0`=2027.
       The draft's `R24.2`–`R25.1` claimed 2023–2026, contradicting the 2025–2027
