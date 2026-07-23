@@ -1,0 +1,7 @@
+# Build output -- regenerate with scripts/package-marketplace.ps1
+dist/
+
+# Paid-product marketing + customer docs (Gumroad listing copy, cheat sheet,
+# launch checklist, cover art). The routines are MIT and public; the packaged
+# kit is the product, so its collateral stays out of the free repo.
+product/
