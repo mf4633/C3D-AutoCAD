@@ -1,6 +1,23 @@
 # Build C3DFieldKit.bundle for Autodesk ApplicationPlugins folder.
 # Usage: powershell -ExecutionPolicy Bypass -File scripts/package-marketplace.ps1
 #
+# 2026-07-23: first load attempt in Civil 3D 2026 showed NO ribbon tab and no
+# working commands -- the whole package was being skipped. Root causes found by
+# diffing against the three bundles that DO load on this machine (Grading
+# Optimization, ADSK Project Explorer, HydroComplete):
+#   1. Platform must be "Civil3D", not "AutoCAD*". Civil 3D filters the entire
+#      ApplicationPackage on this, so a mismatch loads nothing at all -- which
+#      is why both the tab and the commands were missing.
+#   2. AppType="LISP" must be declared; without it the loader does not treat
+#      a .lsp ModuleName as LISP.
+#   3. <Command Local=...> is the localized COMMAND NAME, not a display label.
+#      "Label Acres" registered a command containing a space.
+#   4. GroupName should have no spaces.
+# Consequence of #1: this bundle now targets Civil 3D only. To also support
+# plain AutoCAD/Map, add a second <RuntimeRequirements Platform="AutoCAD"> block
+# inside <Components> with its own ComponentEntry set, the way HydroComplete's
+# bundle stacks one block per release.
+#
 # Release-code map (verified 2026-07-23 against Autodesk's release-vs-year note):
 #   R24.2 = 2023   R24.3 = 2024   R25.0 = 2025   R25.1 = 2026   R26.0 = 2027
 # SeriesMin/Max declare R24.2-R25.1 = Civil 3D 2023-2026. That range is chosen
@@ -90,6 +107,7 @@ $entries = @()
 $entries += @"
     <ComponentEntry AppName="Bootstrap"
       Version="1.0.0"
+      AppType="LISP"
       ModuleName="./Contents/bootstrap.lsp"
       AppDescription="Load shared C3D Field Kit helpers"
       LoadOnAutoCADStartup="True"
@@ -98,16 +116,21 @@ $entries += @"
 
 foreach ($cmd in $Commands.Keys) {
     $info = $Commands[$cmd]
+    # Local must be the COMMAND NAME, not a friendly label -- Local is the
+    # localized command alias AutoCAD registers, so putting "Label Acres" there
+    # registered a command with a space in it. Every working bundle on this
+    # machine sets Local = Global.
     $entries += @"
 
     <ComponentEntry AppName="$cmd"
       Version="1.0.0"
+      AppType="LISP"
       ModuleName="./Contents/$($info.File)"
       AppDescription="$($info.Label)"
       LoadOnAutoCADStartup="False"
       LoadOnCommandInvocation="True">
-      <Commands GroupName="C3D Field Kit">
-        <Command Global="$cmd" Local="$($info.Label)" />
+      <Commands GroupName="C3DFieldKit">
+        <Command Global="$cmd" Local="$cmd" />
       </Commands>
     </ComponentEntry>
 "@
@@ -129,7 +152,6 @@ if (Test-Path (Join-Path $OutBundle "C3DFieldKit.cuix")) {
 $xml = @"
 <?xml version="1.0" encoding="utf-8"?>
 <ApplicationPackage SchemaVersion="1.0"
-  AutodeskProduct="AutoCAD"
   Name="C3D Field Kit"
   Description="26 production LISP macros for Civil 3D: parcel labels, bearings tables, survey labels, text tools, layers, plot-all-PDF."
   AppVersion="1.0.0"
@@ -137,11 +159,11 @@ $xml = @"
   UpgradeCode="{B7F2EEBD-775E-48E0-9F93-69C87DD17AA5}"
   Author="Michael Flynn, PE"
   HelpFile="./Help/quickstart.html"
-  OnlineDocumentationLink="https://github.com/mf4633/C3D-AutoCAD"
+  OnlineDocumentation="https://github.com/mf4633/C3D-AutoCAD"
   Icon="./Resources/icon.png">
   <CompanyDetails Name="Michael Flynn, PE" Url="https://hydrocomplete.com" Email="support@hydrocomplete.com" />
-  <RuntimeRequirements OS="Win64" Platform="AutoCAD*" SeriesMin="R24.2" SeriesMax="R25.1" />
   <Components Description="C3D Field Kit commands">
+    <RuntimeRequirements OS="Win64" Platform="Civil3D" SeriesMin="R24.2" SeriesMax="R25.1" />
 $($entries -join "")
 $cuixEntry
   </Components>
