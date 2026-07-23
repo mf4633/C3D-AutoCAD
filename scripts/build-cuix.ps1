@@ -21,9 +21,10 @@
 #   - every panel ends with a RibbonPanelBreak
 #   - the tab carries an Alias (ID_TAB*), which is how workspaces reference it
 #
-# Deviation from CUI_BUILD_NOTES.md: builds a dedicated "C3D Field Kit" tab
-# (WorkspaceBehavior=MergeOrAddTab) rather than panels on the Plug-Ins tab,
-# because merging into ACAD's base workspace from outside AutoCAD is fragile.
+# Builds a dedicated "C3D Field Kit" tab (WorkspaceBehavior=MergeOrAddTab)
+# rather than panels on the Plug-Ins tab, because merging into ACAD's base
+# workspace from outside AutoCAD is fragile. CUI_BUILD_NOTES.md documents this
+# as the design and explains what to do if review asks for Plug-Ins placement.
 
 $ErrorActionPreference = 'Stop'
 
