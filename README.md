@@ -4,6 +4,8 @@
 
 All routines: pure AutoLISP / VLISP. No DLLs, no .NET, no Dynamo. Works in vanilla AutoCAD, AutoCAD Map, Civil 3D — anywhere `APPLOAD` works.
 
+**Want it packaged?** [**C3D Field Kit**](https://fingazpdx.gumroad.com/l/bmdfn) — the same routines as a one-click zip with a quick-start guide, printable cheat sheet, and email support. The code in this repo is MIT and stays free; the kit is packaging and a reply when something breaks.
+
 ![placeholder — drop a demo GIF of LABELACRES or BDTBL here](docs/demo.gif)
 
 ## Install (one time)
