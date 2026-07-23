@@ -251,9 +251,14 @@ declared range.
       meant claiming three releases while being able to test one. Endpoints 2023
       and 2026 are both exercisable; 2024/2025 are bracketed but untested, which
       is defensible for pure AutoLISP with no version-specific API calls.
-- [ ] Record 90s demo video for listing
-- [ ] Test on Civil 3D 2025, 2026, 2027
-- [ ] Marketplace marketing copy + screenshots
+- [ ] Test on Civil 3D 2023 + 2026 (the installed endpoints of the declared range)
+- [ ] Marketplace marketing copy + 2-3 screenshots (ribbon tab; a parcel with
+      `LABELACRES` output). Capture these during the smoke test.
+- ~~Record 90s demo video~~ — **NOT required.** Autodesk lists demo videos as
+      *recommended*; required listing content is name, description, price and
+      whatever else they request. Screenshots are supported up to 10. Revisit a
+      video only if install volume justifies it, and put it on the Gumroad page
+      rather than the Marketplace listing — that is where it would convert money.
 - ~~PayPal publisher account~~ — not needed under the free-listing decision
 
 ---
