@@ -1,5 +1,47 @@
 # Autodesk App Store listing — copy/paste
 
+---
+
+## Publisher profile (set once, applies to EVERY app)
+
+| Field | Value |
+|-------|-------|
+| Company name | `HydroComplete` |
+| Company URL | `https://hydrocomplete.com` |
+| Support contact | `support@hydrocomplete.com` |
+| PayPal | not required — free listing |
+
+### Company description
+
+```
+HydroComplete makes stormwater and hydrology software for practising civil
+engineers. Our tools run the standard methods — Rational, SCS/NRCS, Manning,
+HEC-22 — and show the formula behind every number, so a result can be checked,
+defended and sealed rather than taken on trust.
+
+Built by a licensed professional engineer working in dam safety and water
+resources, with Civil 3D tools that read pipe networks, catchments and surfaces
+straight from the drawing instead of asking you to re-key them.
+
+https://hydrocomplete.com
+```
+
+### Shorter variant, if the field is tight
+
+```
+Stormwater and hydrology software for civil engineers — browser-based analysis
+and Civil 3D tools where every calculation shows its formula, so the work can be
+checked, defended and sealed. Built by a licensed professional engineer.
+https://hydrocomplete.com
+```
+
+> Deliberately avoids "our team" and any customer or install counts. The
+> publisher profile is public and permanent; a claim that outruns reality is not
+> worth the copy.
+
+---
+
+
 Fill the submission form at <https://apps.autodesk.com/en/MyUploads> with the
 text below. Nothing here is aspirational: every claim matches what the bundle
 actually does.
