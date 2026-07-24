@@ -5,10 +5,15 @@ Autodesk requires every Marketplace plug-in to present a **ribbon UI** via a
 the CUI editor.
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/build-cuix.ps1
+powershell -ExecutionPolicy Bypass -File scripts/build-icons.ps1   # button icons
+powershell -ExecutionPolicy Bypass -File scripts/build-cuix.ps1    # the ribbon
 ```
 
-Writes `marketplace/C3DFieldKit.bundle/C3DFieldKit.cuix`, then reopens it and
+`build-icons.ps1` draws all 27 glyphs at 16 and 32 px into
+`C3DFieldKit.bundle/Resources/`, colour-coded by panel. Run it first — the CUIX
+build fails if an icon reference does not resolve on disk.
+
+`build-cuix.ps1` writes `marketplace/C3DFieldKit.bundle/C3DFieldKit.cuix`, then reopens it and
 asserts the structure. `scripts/package-marketplace.ps1` copies it into the
 shipping bundle and emits the matching `ComponentEntry` automatically.
 
@@ -37,6 +42,7 @@ forward by newer AutoCAD on load.
 | `MenuMacroReference` and `DisplayName` are **read-only** | A button binds to its macro through `MacroID` only; `DisplayName` is derived from the macro's name, which is why macros are created with the button label as their name |
 | `CustomizationSection` has no `MenuGroup` until named **and saved** | The script seeds the file, then reopens it before populating |
 | `$pid` is a read-only PowerShell automatic variable | Using it as a loop variable is a hard error |
+| `Macro.SmallImage` / `LargeImage` **cannot be set out-of-process** — the setter and both image-carrying constructors throw `NullReferenceException`, because they resolve the bitmap through a cache that only exists inside a running AutoCAD | Icons are patched into the saved `.cuix` afterwards (it is an OPC zip: extract, edit `MenuGroup.cui`, rezip). See `Set-CuixIcons` in `build-cuix.ps1` |
 | Panels and tabs get a **fresh random `ElementID`** on every build unless you set one | AutoCAD merges a tab into the workspace **by ID**. New IDs orphan the previous merge and the ribbon **silently stops rendering** — on every rebuild locally, and for every customer on upgrade. Set stable IDs (`ID_C3DFK_PANEL_*`, `ID_TAB_C3DFIELDKIT`), as Autodesk does (`ID_PanelSharedViews`) |
 
 ---
