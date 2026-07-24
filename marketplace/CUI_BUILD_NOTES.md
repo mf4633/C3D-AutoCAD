@@ -9,9 +9,10 @@ powershell -ExecutionPolicy Bypass -File scripts/build-icons.ps1   # button icon
 powershell -ExecutionPolicy Bypass -File scripts/build-cuix.ps1    # the ribbon
 ```
 
-`build-icons.ps1` draws all 27 glyphs at 16 and 32 px into
-`C3DFieldKit.bundle/Resources/`, colour-coded by panel. Run it first — the CUIX
-build fails if an icon reference does not resolve on disk.
+`build-icons.ps1` draws all 27 glyphs at 16 and 32 px into `marketplace/icons/`,
+colour-coded by panel. Those are **build inputs, not shipped resources** —
+`build-cuix.ps1` embeds them into the `.cuix`. Run it first; the CUIX build
+fails if any icon is missing.
 
 `build-cuix.ps1` writes `marketplace/C3DFieldKit.bundle/C3DFieldKit.cuix`, then reopens it and
 asserts the structure. `scripts/package-marketplace.ps1` copies it into the
@@ -43,6 +44,7 @@ forward by newer AutoCAD on load.
 | `CustomizationSection` has no `MenuGroup` until named **and saved** | The script seeds the file, then reopens it before populating |
 | `$pid` is a read-only PowerShell automatic variable | Using it as a loop variable is a hard error |
 | `Macro.SmallImage` / `LargeImage` **cannot be set out-of-process** — the setter and both image-carrying constructors throw `NullReferenceException`, because they resolve the bitmap through a cache that only exists inside a running AutoCAD | Icons are patched into the saved `.cuix` afterwards (it is an OPC zip: extract, edit `MenuGroup.cui`, rezip). See `Set-CuixIcons` in `build-cuix.ps1` |
+| CUI button images **cannot be resolved from a support path** | They must be **embedded in the `.cuix`**. Leaving them in `Resources/` with `SupportPath` set renders every button as the cloud-with-question-mark placeholder. Contract, from Autodesk's `acetmain.cuix`: parts at the **zip root**, extension declared in `[Content_Types].xml`, `Name` includes the extension |
 | Panels and tabs get a **fresh random `ElementID`** on every build unless you set one | AutoCAD merges a tab into the workspace **by ID**. New IDs orphan the previous merge and the ribbon **silently stops rendering** — on every rebuild locally, and for every customer on upgrade. Set stable IDs (`ID_C3DFK_PANEL_*`, `ID_TAB_C3DFIELDKIT`), as Autodesk does (`ID_PanelSharedViews`) |
 
 ---
@@ -135,8 +137,12 @@ Order of diagnosis:
    force a re-merge: `CUILOAD` → unload `C3DFIELDKIT` → OK → restart Civil 3D.
    A structurally perfect CUIX looks exactly like a broken one in this state, so
    check IDs before suspecting the file.
-4. **Tab appears but the panel is truncated** → too many buttons per row.
-5. **Still nothing** → check the `APPAUTOLOAD` system variable; it gates
+4. **Buttons show a cloud with a question mark** → that is AutoCAD's
+   "image not found" placeholder. The images are not embedded in the `.cuix`,
+   or `[Content_Types].xml` does not declare their extension. A support path
+   will not fix it.
+5. **Tab appears but the panel is truncated** → too many buttons per row.
+6. **Still nothing** → check the `APPAUTOLOAD` system variable; it gates
    autoloading entirely.
 
 ---
