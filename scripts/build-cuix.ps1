@@ -132,6 +132,12 @@ foreach ($p in $Panels) {
     $panel = New-Object Autodesk.AutoCAD.Customization.RibbonPanelSource($ribbonRoot)
     $panel.Name = "C3D Field Kit - $($p.Name)"
     $panel.Text = $p.Name
+    # STABLE ElementID. Left to itself the API mints a fresh random UID
+    # (RBNU_242_xxxxx) on every build. AutoCAD merges the tab into the user's
+    # workspace BY ID, so regenerating with new IDs orphans that merge and the
+    # ribbon silently disappears -- for us on rebuild, and for every customer on
+    # upgrade. Autodesk's own files use stable readable IDs (ID_PanelSharedViews).
+    $panel.ElementID = "ID_C3DFK_PANEL_$($p.Name.ToUpper())"
     # Passing RibbonRoot to the ctor only sets the parent link -- it does NOT
     # register the panel. Without this Add, the panel is silently dropped on save.
     $ribbonRoot.RibbonPanelSources.Add($panel) | Out-Null
@@ -165,6 +171,7 @@ $tab = New-Object Autodesk.AutoCAD.Customization.RibbonTabSource($ribbonRoot)
 $tab.Name = 'C3D Field Kit'
 $tab.Text = 'C3D Field Kit'
 $tab.KeyTip = 'CFK'
+$tab.ElementID = 'ID_TAB_C3DFIELDKIT'   # stable -- see the panel comment above
 $tab.DefaultDisplay = [Autodesk.AutoCAD.Customization.DefaultDisplay]::AddToWorkspace
 $tab.WorkspaceBehavior = [Autodesk.AutoCAD.Customization.TabWorkspaceBehavior]::MergeOrAddTab
 $tab.Aliases.Add('ID_TAB_C3DFIELDKIT') | Out-Null
@@ -206,4 +213,13 @@ if ($nMacro -ne 27 -or $nBtn -ne 27 -or $nPanel -ne $expPanel -or $nTab -ne 1 -o
     throw "Verification FAILED -- counts do not match."
 }
 if ($maxPerRow -gt 3) { throw "Verification FAILED -- a row has $maxPerRow buttons; panel will truncate again." }
+
+# Guard the stable-ID invariant: an auto-generated UID means the workspace merge
+# will be orphaned on the next rebuild and the ribbon will vanish.
+$unstable = @($cmg.RibbonRoot.RibbonPanelSources | Where-Object { $_.ElementID -notlike 'ID_C3DFK_*' })
+$unstable += @($cmg.RibbonRoot.RibbonTabSources | Where-Object { $_.ElementID -ne 'ID_TAB_C3DFIELDKIT' })
+if ($unstable.Count -gt 0) {
+    throw "Verification FAILED -- $($unstable.Count) element(s) have auto-generated IDs: $(($unstable | ForEach-Object { $_.ElementID }) -join ', ')"
+}
+Write-Host "  stable IDs:    OK (panels ID_C3DFK_PANEL_*, tab ID_TAB_C3DFIELDKIT)"
 Write-Host "Verification passed."
