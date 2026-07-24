@@ -190,10 +190,10 @@ no configuration.
 
 ## Upload
 
-Submit the **`.bundle` folder** (zipped): `dist/C3DFieldKit_v1_bundle.zip`.
+Submit the **`.bundle` folder** (zipped): `dist/HydroCompleteFieldKit_v1_bundle.zip`.
 
 Autodesk builds the MSI installer from an autoloader bundle — you do **not** need
-to supply your own `.exe`/`.msi`. `marketplace/installer/C3DFieldKit.iss` is kept
+to supply your own `.exe`/`.msi`. `marketplace/installer/HydroCompleteFieldKit.iss` is kept
 only for local testing and the Gumroad channel.
 
 ## Step 1 form — the remaining fields
@@ -206,7 +206,7 @@ https://hydrocomplete.com/privacy.html
 
 ### App File
 
-Upload `dist/C3DFieldKit_v1_bundle.zip`. It already contains
+Upload `dist/HydroCompleteFieldKit_v1_bundle.zip`. It already contains
 `Help/quickstart.html`, which satisfies "include application and help file in a
 zip archive".
 
@@ -224,7 +224,7 @@ First release. 26 drafting commands plus a FIELDKIT about command, on a dedicate
 
 ### App Icon
 
-`marketplace/C3DFieldKit.bundle/Resources/icon.png` (256×256 — the form scales
+`marketplace/HydroCompleteFieldKit.bundle/Resources/icon.png` (256×256 — the form scales
 anything above 120×120).
 
 ### General Usage Instructions*
@@ -248,7 +248,7 @@ Run FIELDKIT at any time for the command summary and support details.
 ### Installation/Uninstallation*
 
 ```
-Installation is handled by the Autodesk App Store installer. The plug-in is placed in the Autodesk ApplicationPlugins folder as C3DFieldKit.bundle, and loads automatically the next time Civil 3D starts. No APPLOAD, no Support File Search Path entry, and no Trusted Locations setting is required.
+Installation is handled by the Autodesk App Store installer. The plug-in is placed in the Autodesk ApplicationPlugins folder as HydroCompleteFieldKit.bundle, and loads automatically the next time Civil 3D starts. No APPLOAD, no Support File Search Path entry, and no Trusted Locations setting is required.
 
 After installing, restart Civil 3D and look for the "Field Kit" tab on the ribbon.
 

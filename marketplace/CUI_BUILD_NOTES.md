@@ -1,4 +1,4 @@
-# C3D Field Kit — ribbon / CUIX notes
+# Survey & Parcel Field Kit — ribbon / CUIX notes
 
 Autodesk requires every Marketplace plug-in to present a **ribbon UI** via a
 **partial CUIX**. This kit's CUIX is **generated from source**, not hand-built in
@@ -14,7 +14,7 @@ colour-coded by panel. Those are **build inputs, not shipped resources** —
 `build-cuix.ps1` embeds them into the `.cuix`. Run it first; the CUIX build
 fails if any icon is missing.
 
-`build-cuix.ps1` writes `marketplace/C3DFieldKit.bundle/C3DFieldKit.cuix`, then reopens it and
+`build-cuix.ps1` writes `marketplace/HydroCompleteFieldKit.bundle/HydroCompleteFieldKit.cuix`, then reopens it and
 asserts the structure. `scripts/package-marketplace.ps1` copies it into the
 shipping bundle and emits the matching `ComponentEntry` automatically.
 
@@ -45,7 +45,7 @@ forward by newer AutoCAD on load.
 | `$pid` is a read-only PowerShell automatic variable | Using it as a loop variable is a hard error |
 | `Macro.SmallImage` / `LargeImage` **cannot be set out-of-process** — the setter and both image-carrying constructors throw `NullReferenceException`, because they resolve the bitmap through a cache that only exists inside a running AutoCAD | Icons are patched into the saved `.cuix` afterwards (it is an OPC zip: extract, edit `MenuGroup.cui`, rezip). See `Set-CuixIcons` in `build-cuix.ps1` |
 | CUI button images **cannot be resolved from a support path** | They must be **embedded in the `.cuix`**. Leaving them in `Resources/` with `SupportPath` set renders every button as the cloud-with-question-mark placeholder. Contract, from Autodesk's `acetmain.cuix`: parts at the **zip root**, extension declared in `[Content_Types].xml`, `Name` includes the extension |
-| Panels and tabs get a **fresh random `ElementID`** on every build unless you set one | AutoCAD merges a tab into the workspace **by ID**. New IDs orphan the previous merge and the ribbon **silently stops rendering** — on every rebuild locally, and for every customer on upgrade. Set stable IDs (`ID_C3DFK_PANEL_*`, `ID_TAB_C3DFIELDKIT`), as Autodesk does (`ID_PanelSharedViews`) |
+| Panels and tabs get a **fresh random `ElementID`** on every build unless you set one | AutoCAD merges a tab into the workspace **by ID**. New IDs orphan the previous merge and the ribbon **silently stops rendering** — on every rebuild locally, and for every customer on upgrade. Set stable IDs (`ID_FK_PANEL_*`, `ID_TAB_FIELDKIT`), as Autodesk does (`ID_PanelSharedViews`) |
 
 ---
 
@@ -61,13 +61,13 @@ Autodesk's own partial CUIX files put **1–3 buttons in a row** and use
 - **≤ 3 buttons per row**, **≤ 3 rows per panel**
 - Split commands into small named panels rather than one large one
 - Close every panel with a `RibbonPanelBreak`
-- Give the tab an `<Alias>` (`ID_TAB_C3DFIELDKIT`) — that is how workspaces
+- Give the tab an `<Alias>` (`ID_TAB_FIELDKIT`) — that is how workspaces
   reference it
 
 `build-cuix.ps1` **fails the build** if any row exceeds 3 buttons, so this
 regression cannot ship again silently.
 
-### Current layout — dedicated "C3D Field Kit" tab, 7 panels
+### Current layout — dedicated "Field Kit" tab, 7 panels
 
 | Panel | Buttons |
 |-------|---------|
@@ -100,7 +100,7 @@ header comment):
 | `Platform` | `Civil3D` — **not** `AutoCAD*` | Civil 3D filters the whole `ApplicationPackage` on this. A mismatch loads **nothing**: no tab *and* no commands |
 | `AppType` | `LISP` on every `ComponentEntry` | Without it a `.lsp` `ModuleName` is not treated as LISP |
 | `<Command Local=…>` | the command name, `Local` = `Global` | `Local` is the localized command alias, not a display label. A label with a space registers a command with a space in its name |
-| `GroupName` | no spaces (`C3DFieldKit`) | Matches every working bundle on the machine |
+| `GroupName` | no spaces (`FieldKit`) | Matches every working bundle on the machine |
 
 Also: `RuntimeRequirements` goes **inside** `<Components>`; the attribute is
 `OnlineDocumentation`, not `OnlineDocumentationLink`; there is no
@@ -134,7 +134,7 @@ Order of diagnosis:
    panel/tab was dropped on save (see the registration trap above).
 3. **Tab appeared once, then vanished after a rebuild** → orphaned workspace
    merge from changed `ElementID`s. Confirm the CUIX still has stable IDs, then
-   force a re-merge: `CUILOAD` → unload `C3DFIELDKIT` → OK → restart Civil 3D.
+   force a re-merge: `CUILOAD` → unload `FIELDKIT` → OK → restart Civil 3D.
    A structurally perfect CUIX looks exactly like a broken one in this state, so
    check IDs before suspecting the file.
 4. **Buttons show a cloud with a question mark** → that is AutoCAD's
@@ -150,8 +150,8 @@ Order of diagnosis:
 ## Local test
 
 ```powershell
-Copy-Item dist\C3DFieldKit_v1\C3DFieldKit.bundle `
-  "$env:ProgramData\Autodesk\ApplicationPlugins\C3DFieldKit.bundle" -Recurse -Force
+Copy-Item dist\HydroCompleteFieldKit_v1\HydroCompleteFieldKit.bundle `
+  "$env:ProgramData\Autodesk\ApplicationPlugins\HydroCompleteFieldKit.bundle" -Recurse -Force
 ```
 
 Restart Civil 3D. `%ProgramData%` is deliberate — it is the same path the Inno

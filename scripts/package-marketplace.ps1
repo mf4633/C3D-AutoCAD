@@ -1,4 +1,4 @@
-# Build C3DFieldKit.bundle for Autodesk ApplicationPlugins folder.
+# Build HydroCompleteFieldKit.bundle for Autodesk ApplicationPlugins folder.
 # Usage: powershell -ExecutionPolicy Bypass -File scripts/package-marketplace.ps1
 #
 # 2026-07-23: first load attempt in Civil 3D 2026 showed NO ribbon tab and no
@@ -36,9 +36,9 @@
 
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
-$TemplateBundle = Join-Path $Root "marketplace\C3DFieldKit.bundle"
-$OutRoot = Join-Path $Root "dist\C3DFieldKit_v1"
-$OutBundle = Join-Path $OutRoot "C3DFieldKit.bundle"
+$TemplateBundle = Join-Path $Root "marketplace\HydroCompleteFieldKit.bundle"
+$OutRoot = Join-Path $Root "dist\HydroCompleteFieldKit_v1"
+$OutBundle = Join-Path $OutRoot "HydroCompleteFieldKit.bundle"
 $Contents = Join-Path $OutBundle "Contents"
 
 # Command name -> source file (excludes acaddoc.lsp, lspload.lsp)
@@ -91,8 +91,8 @@ Copy-Item (Join-Path $TemplateBundle "Help\quickstart.html") (Join-Path $OutBund
 if (Test-Path (Join-Path $TemplateBundle "Resources\icon.png")) {
     Copy-Item (Join-Path $TemplateBundle "Resources\*") (Join-Path $OutBundle "Resources")
 }
-if (Test-Path (Join-Path $TemplateBundle "C3DFieldKit.cuix")) {
-    Copy-Item (Join-Path $TemplateBundle "C3DFieldKit.cuix") $OutBundle
+if (Test-Path (Join-Path $TemplateBundle "HydroCompleteFieldKit.cuix")) {
+    Copy-Item (Join-Path $TemplateBundle "HydroCompleteFieldKit.cuix") $OutBundle
 }
 
 # Copy LISP sources
@@ -140,12 +140,12 @@ foreach ($cmd in $Commands.Keys) {
 }
 
 $cuixEntry = ""
-if (Test-Path (Join-Path $OutBundle "C3DFieldKit.cuix")) {
+if (Test-Path (Join-Path $OutBundle "HydroCompleteFieldKit.cuix")) {
     $cuixEntry = @"
 
-    <ComponentEntry AppName="C3DFieldKitUI"
+    <ComponentEntry AppName="HydroCompleteFieldKitUI"
       Version="1.0.0"
-      ModuleName="./C3DFieldKit.cuix"
+      ModuleName="./HydroCompleteFieldKit.cuix"
       AppDescription="Field Kit ribbon panel"
       LoadOnAutoCADStartup="True"
       LoadOnCommandInvocation="False" />
@@ -183,8 +183,8 @@ Write-Host "  LISP files in Contents: $lspCount"
 Write-Host "  Commands in PackageContents.xml: $($Commands.Count) (26 macros + FIELDKIT about)"
 Write-Host ""
 Write-Host "Local test: copy bundle to"
-Write-Host "  $env:ProgramData\Autodesk\ApplicationPlugins\C3DFieldKit.bundle"
+Write-Host "  $env:ProgramData\Autodesk\ApplicationPlugins\HydroCompleteFieldKit.bundle"
 Write-Host "Then restart Civil 3D."
 Write-Host ""
 Write-Host "CUIX: regenerate with scripts/build-cuix.ps1 if the ribbon changed."
-Write-Host "Next: compile the installer (marketplace/installer/C3DFieldKit.iss)."
+Write-Host "Next: compile the installer (marketplace/installer/HydroCompleteFieldKit.iss)."

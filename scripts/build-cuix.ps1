@@ -1,4 +1,4 @@
-# Generate C3DFieldKit.cuix (partial customization file) WITHOUT opening the
+# Generate HydroCompleteFieldKit.cuix (partial customization file) WITHOUT opening the
 # CUI editor, by driving AcCui.dll -- AutoCAD's customization API -- from a
 # standalone process.
 #
@@ -25,7 +25,7 @@
 # abbreviated or made into acronyms", so "C3D" -- an acronym of Civil 3D -- is
 # out of all user-facing text. Ribbon tab is "Field Kit"; the listing is
 # "Survey & Parcel Field Kit for Civil 3D", which uses the mark referentially.
-# ElementIDs and MacroIDs deliberately KEEP the C3DFK_ prefix: they are internal
+# ElementIDs and MacroIDs deliberately KEEP the FK_ prefix: they are internal
 # identifiers, never shown, and changing them orphans the workspace merge.
 #
 # Builds a dedicated "Field Kit" tab (WorkspaceBehavior=MergeOrAddTab)
@@ -37,8 +37,8 @@ $ErrorActionPreference = 'Stop'
 
 $AcadDir   = 'C:\Program Files\Autodesk\AutoCAD 2023'
 $Root      = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
-$OutFile   = Join-Path $Root 'marketplace\C3DFieldKit.bundle\C3DFieldKit.cuix'
-$GroupName = 'C3DFIELDKIT'
+$OutFile   = Join-Path $Root 'marketplace\HydroCompleteFieldKit.bundle\HydroCompleteFieldKit.cuix'
+$GroupName = 'FIELDKIT'
 $MaxRows   = 3      # a ribbon panel draws at most 3 stacked rows
 
 Add-Type -Path (Join-Path $AcadDir 'AcCui.dll')
@@ -127,7 +127,7 @@ foreach ($p in $Panels) {
     foreach ($c in $p.Cmds) {
         # ^C^C cancels any in-progress command before invoking.
         $m = New-Object Autodesk.AutoCAD.Customization.MenuMacro(
-            $macroGroup, $c.Label, "^C^C$($c.Cmd)", "C3DFK_$($c.Cmd)")
+            $macroGroup, $c.Label, "^C^C$($c.Cmd)", "FK_$($c.Cmd)")
         # Icons are NOT set here -- see Set-CuixIcons below. Macro.SmallImage /
         # LargeImage throw NullReferenceException out-of-process (the setter
         # reaches for an image cache that only exists inside a running AutoCAD),
@@ -150,7 +150,7 @@ foreach ($p in $Panels) {
     # workspace BY ID, so regenerating with new IDs orphans that merge and the
     # ribbon silently disappears -- for us on rebuild, and for every customer on
     # upgrade. Autodesk's own files use stable readable IDs (ID_PanelSharedViews).
-    $panel.ElementID = "ID_C3DFK_PANEL_$($p.Name.ToUpper())"
+    $panel.ElementID = "ID_FK_PANEL_$($p.Name.ToUpper())"
     # Passing RibbonRoot to the ctor only sets the parent link -- it does NOT
     # register the panel. Without this Add, the panel is silently dropped on save.
     $ribbonRoot.RibbonPanelSources.Add($panel) | Out-Null
@@ -184,10 +184,10 @@ $tab = New-Object Autodesk.AutoCAD.Customization.RibbonTabSource($ribbonRoot)
 $tab.Name = 'Field Kit'
 $tab.Text = 'Field Kit'
 $tab.KeyTip = 'CFK'
-$tab.ElementID = 'ID_TAB_C3DFIELDKIT'   # stable -- see the panel comment above
+$tab.ElementID = 'ID_TAB_FIELDKIT'   # stable -- see the panel comment above
 $tab.DefaultDisplay = [Autodesk.AutoCAD.Customization.DefaultDisplay]::AddToWorkspace
 $tab.WorkspaceBehavior = [Autodesk.AutoCAD.Customization.TabWorkspaceBehavior]::MergeOrAddTab
-$tab.Aliases.Add('ID_TAB_C3DFIELDKIT') | Out-Null
+$tab.Aliases.Add('ID_TAB_FIELDKIT') | Out-Null
 $ribbonRoot.RibbonTabSources.Add($tab) | Out-Null
 
 # NB: not $pid -- that is a read-only PowerShell automatic variable.
@@ -225,7 +225,7 @@ function Set-CuixIcons {
 
     # 1. embed the images at the package root
     $embedded = 0
-    foreach ($png in Get-ChildItem $IconSourceDir -Filter 'c3dfk_*.png') {
+    foreach ($png in Get-ChildItem $IconSourceDir -Filter 'fk_*.png') {
         Copy-Item $png.FullName (Join-Path $work $png.Name) -Force
         $embedded++
     }
@@ -249,12 +249,15 @@ function Set-CuixIcons {
     $patched = 0
     foreach ($mm in $doc.GetElementsByTagName('MenuMacro')) {
         $uid = $mm.GetAttribute('UID')
-        if ($uid -notlike 'C3DFK_*') { continue }
-        $cmd = $uid.Substring(6).ToLower()
+        if ($uid -notlike 'FK_*') { continue }
+        # Strip the prefix by pattern, not by a fixed offset -- a hard-coded
+        # length silently breaks the moment the prefix is renamed, and short
+        # UIDs like FK_BD then throw.
+        $cmd = ($uid -replace '^FK_', '').ToLower()
         foreach ($pair in @(@('SmallImage', 16), @('LargeImage', 32))) {
             $node = $mm.GetElementsByTagName($pair[0]) | Select-Object -First 1
             if ($node) {
-                $node.SetAttribute('Name', ("c3dfk_{0}_{1}.png" -f $cmd, $pair[1]))
+                $node.SetAttribute('Name', ("fk_{0}_{1}.png" -f $cmd, $pair[1]))
                 $patched++
             }
         }
@@ -301,18 +304,18 @@ if ($maxPerRow -gt 3) { throw "Verification FAILED -- a row has $maxPerRow butto
 
 # Guard the stable-ID invariant: an auto-generated UID means the workspace merge
 # will be orphaned on the next rebuild and the ribbon will vanish.
-$unstable = @($cmg.RibbonRoot.RibbonPanelSources | Where-Object { $_.ElementID -notlike 'ID_C3DFK_*' })
-$unstable += @($cmg.RibbonRoot.RibbonTabSources | Where-Object { $_.ElementID -ne 'ID_TAB_C3DFIELDKIT' })
+$unstable = @($cmg.RibbonRoot.RibbonPanelSources | Where-Object { $_.ElementID -notlike 'ID_FK_*' })
+$unstable += @($cmg.RibbonRoot.RibbonTabSources | Where-Object { $_.ElementID -ne 'ID_TAB_FIELDKIT' })
 if ($unstable.Count -gt 0) {
     throw "Verification FAILED -- $($unstable.Count) element(s) have auto-generated IDs: $(($unstable | ForEach-Object { $_.ElementID }) -join ', ')"
 }
-Write-Host "  stable IDs:    OK (panels ID_C3DFK_PANEL_*, tab ID_TAB_C3DFIELDKIT)"
+Write-Host "  stable IDs:    OK (panels ID_FK_PANEL_*, tab ID_TAB_FIELDKIT)"
 
 # Read the icon references back out of the rezipped package and confirm every
 # one names a file that actually exists -- a dangling reference renders a blank
 # button with no error anywhere.
 Add-Type -AssemblyName System.IO.Compression.FileSystem
-$iconDir = Join-Path $Root 'marketplace\C3DFieldKit.bundle\Resources'
+$iconDir = Join-Path $Root 'marketplace\HydroCompleteFieldKit.bundle\Resources'
 $zip = [System.IO.Compression.ZipFile]::OpenRead($OutFile)
 try {
     $entry  = $zip.Entries | Where-Object { $_.Name -eq 'MenuGroup.cui' }

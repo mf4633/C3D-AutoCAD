@@ -1,4 +1,4 @@
-# C3D Field Kit — logo & brand assets
+# Survey & Parcel Field Kit — logo & brand assets
 
 Generated 2026-07-24. Vector sources are `.svg`; the wordmark is **outlined** (no
 live text), so the files render identically on any machine with no font installed.
@@ -14,15 +14,15 @@ distance tables, N/E coordinate labels, elevation labels.
 
 | File | Use |
 | --- | --- |
-| `c3dfk_icon.svg` | Primary app icon — plate + mark + **C3D FIELD KIT**. Use at 128 px and up. |
-| `c3dfk_mark.svg` | Mark only, full detail (sight lines + ring). Use 64–512 px. |
-| `c3dfk_mark_flat.svg` | Mark only, simplified (solid point, no sight lines). Use at 48 px and below. |
-| `c3dfk_lockup_dark.svg` | Horizontal lockup, light type — for dark backgrounds, transparent. |
-| `c3dfk_lockup_light.svg` | Horizontal lockup, navy type — for white/light backgrounds. |
-| `c3dfk_lockup_on_navy.svg` | Same lockup with the navy field baked in. |
-| `png/c3dfk_icon_{1024,512,256,128}.png` | Raster app icon with the words. |
-| `png/c3dfk_mark_{512,256,128,64,48,32,16}.png` | Raster mark; ≤48 px auto-switches to the simplified art. |
-| `png/c3dfk_lockup_*.png` | Raster lockups at 240 px and 480 px tall. |
+| `fk_icon.svg` | Primary app icon — plate + mark + **C3D FIELD KIT**. Use at 128 px and up. |
+| `fk_mark.svg` | Mark only, full detail (sight lines + ring). Use 64–512 px. |
+| `fk_mark_flat.svg` | Mark only, simplified (solid point, no sight lines). Use at 48 px and below. |
+| `fk_lockup_dark.svg` | Horizontal lockup, light type — for dark backgrounds, transparent. |
+| `fk_lockup_light.svg` | Horizontal lockup, navy type — for white/light backgrounds. |
+| `fk_lockup_on_navy.svg` | Same lockup with the navy field baked in. |
+| `png/fk_icon_{1024,512,256,128}.png` | Raster app icon with the words. |
+| `png/fk_mark_{512,256,128,64,48,32,16}.png` | Raster mark; ≤48 px auto-switches to the simplified art. |
+| `png/fk_lockup_*.png` | Raster lockups at 240 px and 480 px tall. |
 | `png/c3dfk.ico` | Multi-resolution favicon (16/32/48/64/128/256) for the product page. |
 
 ## Palette
@@ -41,7 +41,7 @@ Grid lines are white at 8 % opacity, eight divisions, clipped to the plate.
 
 - Keep clear space of at least the plate's corner radius (22 % of the icon's width) on all sides.
 - Never re-set the wordmark in a different typeface — use these files.
-- On busy photography, use `c3dfk_lockup_on_navy.svg`, not the transparent version.
+- On busy photography, use `fk_lockup_on_navy.svg`, not the transparent version.
 - Below 48 px use the flat mark. Below 24 px drop the words entirely.
 
 ## Regenerating

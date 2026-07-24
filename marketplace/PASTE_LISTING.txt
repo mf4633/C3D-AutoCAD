@@ -1,0 +1,75 @@
+PASTE-READY LISTING TEXT - C3D Field Kit v1.0.0
+Pure ASCII, no markdown. Paste directly into the Autodesk portal fields.
+
+============================================================
+SHORT DESCRIPTION  (subtitle field)
+============================================================
+
+Plain AutoLISP, no DLLs. 26 one-command fixes for the small repetitive jobs: parcel areas, bearings tables, N/E and elevation labels, text case, layer chores.
+
+============================================================
+LONG DESCRIPTION  (2782 characters)
+============================================================
+
+C3D Field Kit puts 26 everyday drafting commands on a single ribbon tab, so the small repetitive jobs stop costing you clicks.
+
+It is plain AutoLISP. No .NET, no DLLs, no Dynamo, no background service. It installs through the standard Autodesk autoloader  -  no APPLOAD, no Support File Search Path edits, no Trusted Locations to configure. Full source is included and public.
+
+WHAT YOU GET
+
+Parcel
+  LABELACRES  label closed polylines with their area in acres
+  TOTALAREA   sum the area of any selection
+  TLEN        total length across lines, arcs, polylines, splines and ellipses
+  BD          label a segment with its bearing and distance
+  BDTBL       insert a bearings-and-distances table for a lot
+
+Survey
+  NE          repeating northing/easting label at picked points
+  ZL          repeating elevation label at picked points
+  CENTROID    place a point at the bounding-box centre of a closed shape
+  SLP         label slope between two picked points: percent, H:V and dv/dh
+
+Text
+  MAKEUPPER / MAKELOWER / TITLECASE   case-fold text and mtext, leaving inline
+                                      formatting codes intact
+  CTH         change text height across a selection
+  TROT        flip upside-down text 180 degrees so it reads right-side up
+  SCALETXT    scale text in place without moving its insertion point
+  T2M         convert text to mtext, keeping height, style and rotation
+
+Elevation
+  FLAT        flatten a selection to Z=0 in place
+  CHZ         change the Z of selected objects
+  GETZ        read the Z of a picked object
+
+Layers
+  LI / LUI    isolate and unisolate layers
+  LDEL        delete a layer and everything on it
+  BC          count blocks by effective name, so dynamic blocks group correctly
+
+Utilities
+  PLT         plot every layout in the drawing to one PDF, next to the DWG
+  PA          audit and purge, three passes
+  ZO          zoom to selected objects
+
+Every command also runs from the command line, and FIELDKIT prints the full list with support details at any time.
+
+NOTES AND LIMITATIONS
+
+Drawing units are assumed to be US survey feet. Area labels convert square feet to acres at 43560 sf/ac. For metric drawings, change SQFT_PER_ACRE in the source to 4046.856.
+
+BD and BDTBL operate on polylines and lines. They do not read Civil 3D parcel objects or alignment stationing.
+
+FLAT does not handle 3DPOLY, 3DFACE, MESH or SURFACE  -  explode those first.
+
+PLT requires the drawing to be saved, and writes the PDF beside the DWG.
+
+LICENCE
+
+MIT. Install and modify on any number of machines. Full source is public at github.com/mf4633/C3D-AutoCAD.
+
+WHO MADE IT
+
+Built by the team behind HydroComplete  -  stormwater analysis driven straight from your Civil 3D drawing, with full formula transparency.
+https://hydrocomplete.com/civil3d

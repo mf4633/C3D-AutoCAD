@@ -2,9 +2,9 @@
 #
 # Usage: powershell -ExecutionPolicy Bypass -File scripts/build-icons.ps1
 #
-# Writes c3dfk_<CMD>_16.png and _32.png into
+# Writes fk_<CMD>_16.png and _32.png into
 # marketplace/icons/ -- these are BUILD INPUTS, not shipped resources. They get
-# embedded INTO C3DFieldKit.cuix by build-cuix.ps1. AutoCAD cannot resolve CUI
+# embedded INTO HydroCompleteFieldKit.cuix by build-cuix.ps1. AutoCAD cannot resolve CUI
 # button images from a support path -- they must live inside the .cuix package.
 #
 # Every glyph is drawn on a 32-unit design grid and scaled, so 16 and 32 px are
@@ -105,7 +105,7 @@ function New-Icon([string]$cmd, [int]$size) {
 
     & $spec.Draw
 
-    $path = Join-Path $OutDir ("c3dfk_{0}_{1}.png" -f $cmd.ToLower(), $size)
+    $path = Join-Path $OutDir ("fk_{0}_{1}.png" -f $cmd.ToLower(), $size)
     $bmp.Save($path, [System.Drawing.Imaging.ImageFormat]::Png)
     $script:pen.Dispose(); $script:brush.Dispose(); $script:g.Dispose(); $bmp.Dispose()
 }
