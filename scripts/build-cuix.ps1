@@ -199,14 +199,44 @@ $cs.Save() | Out-Null
 # running AutoCAD. The generator already emits empty <SmallImage Name="" /> and
 # <LargeImage Name="" /> elements, and Autodesk's own files fill exactly that
 # attribute, so patch the saved package directly. A .cuix is an OPC zip.
+#
+# CUI button images CANNOT be resolved from a support path -- that was a wrong
+# theory that rendered every button as AutoCAD's cloud-with-question-mark
+# "image not found" placeholder. They must be EMBEDDED in the .cuix package.
+# Contract copied from Autodesk's own acetmain.cuix (Express Tools), which
+# embeds 36 bitmaps:
+#   1. image files sit at the ZIP ROOT of the .cuix (no subfolder)
+#   2. [Content_Types].xml declares a <Default> for the extension
+#   3. <SmallImage Name="..."/> names the file WITH its extension
 function Set-CuixIcons {
-    param([string]$CuixPath, [string]$IconDirName)
+    param([string]$CuixPath, [string]$IconSourceDir)
 
     Add-Type -AssemblyName System.IO.Compression.FileSystem
     $work = Join-Path (Split-Path -Parent $CuixPath) '_cuix_icon_work'
     if (Test-Path $work) { Remove-Item -LiteralPath $work -Recurse -Force }
     [System.IO.Compression.ZipFile]::ExtractToDirectory($CuixPath, $work)
 
+    # 1. embed the images at the package root
+    $embedded = 0
+    foreach ($png in Get-ChildItem $IconSourceDir -Filter 'c3dfk_*.png') {
+        Copy-Item $png.FullName (Join-Path $work $png.Name) -Force
+        $embedded++
+    }
+
+    # 2. declare the content type, or the part is not a valid OPC member
+    $ctPath = Join-Path $work '[Content_Types].xml'
+    [xml]$ct = Get-Content -LiteralPath $ctPath -Raw
+    $ns = 'http://schemas.openxmlformats.org/package/2006/content-types'
+    $hasPng = @($ct.Types.ChildNodes | Where-Object { $_.Extension -eq 'png' }).Count -gt 0
+    if (-not $hasPng) {
+        $node = $ct.CreateElement('Default', $ns)
+        $node.SetAttribute('Extension', 'png')
+        $node.SetAttribute('ContentType', 'image/png')
+        $ct.Types.AppendChild($node) | Out-Null
+        $ct.Save($ctPath)
+    }
+
+    # 3. point each macro at its embedded file, by name with extension
     $menuPath = Join-Path $work 'MenuGroup.cui'
     [xml]$doc = Get-Content -LiteralPath $menuPath -Raw
     $patched = 0
@@ -227,10 +257,12 @@ function Set-CuixIcons {
     [System.IO.File]::Delete($CuixPath)
     [System.IO.Compression.ZipFile]::CreateFromDirectory($work, $CuixPath)
     Remove-Item -LiteralPath $work -Recurse -Force
-    return $patched
+    return @{ Patched = $patched; Embedded = $embedded }
 }
 
-$patchedRefs = Set-CuixIcons -CuixPath $OutFile -IconDirName 'Resources'
+$iconSrc  = Join-Path $Root 'marketplace\icons'
+if (-not (Test-Path $iconSrc)) { throw "Icon source $iconSrc missing -- run scripts/build-icons.ps1 first." }
+$iconStats = Set-CuixIcons -CuixPath $OutFile -IconSourceDir $iconSrc
 
 # --- Verify by reopening ------------------------------------------------
 $check = New-Object Autodesk.AutoCAD.Customization.CustomizationSection($OutFile)
@@ -281,13 +313,27 @@ try {
     $menuXml = $reader.ReadToEnd(); $reader.Close()
 } finally { $zip.Dispose() }
 
-$named = [regex]::Matches($menuXml, '<(?:Small|Large)Image Name="([^"]+)"')
-$missing = @($named | ForEach-Object { $_.Groups[1].Value } | Where-Object { -not (Test-Path (Join-Path $iconDir $_)) })
+# Every referenced image must exist as a part INSIDE the package, and the
+# extension must be declared in [Content_Types].xml. A reference that resolves
+# to nothing renders the cloud-with-question-mark placeholder, silently.
+$zip2 = [System.IO.Compression.ZipFile]::OpenRead($OutFile)
+try {
+    $partNames = @($zip2.Entries | ForEach-Object { $_.FullName })
+    $ctEntry   = $zip2.Entries | Where-Object { $_.Name -eq '[Content_Types].xml' }
+    $ctReader  = New-Object System.IO.StreamReader($ctEntry.Open())
+    $ctXml     = $ctReader.ReadToEnd(); $ctReader.Close()
+} finally { $zip2.Dispose() }
+
+$named   = [regex]::Matches($menuXml, '<(?:Small|Large)Image Name="([^"]+)"')
+$dangling = @($named | ForEach-Object { $_.Groups[1].Value } | Where-Object { $partNames -notcontains $_ })
 if ($named.Count -ne 54) {
     throw "Verification FAILED -- $($named.Count) icon references in the package, expected 54 (27 commands x small+large)."
 }
-if ($missing.Count -gt 0) {
-    throw "Verification FAILED -- $($missing.Count) dangling icon reference(s): $(($missing | Select-Object -First 6) -join ', ') -- run scripts/build-icons.ps1"
+if ($dangling.Count -gt 0) {
+    throw "Verification FAILED -- $($dangling.Count) reference(s) name a part not embedded in the .cuix: $(($dangling | Select-Object -First 6) -join ', ')"
 }
-Write-Host "  icons:         OK ($($named.Count) references, all resolve on disk)"
+if ($ctXml -notmatch 'Extension="png"') {
+    throw "Verification FAILED -- [Content_Types].xml does not declare the png extension; AutoCAD will not read the embedded images."
+}
+Write-Host "  icons:         OK ($($iconStats.Embedded) embedded in package, $($named.Count) refs, png content-type declared)"
 Write-Host "Verification passed."

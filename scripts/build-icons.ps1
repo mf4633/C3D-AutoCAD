@@ -3,9 +3,9 @@
 # Usage: powershell -ExecutionPolicy Bypass -File scripts/build-icons.ps1
 #
 # Writes c3dfk_<CMD>_16.png and _32.png into
-# marketplace/C3DFieldKit.bundle/Resources/. AutoCAD resolves these by bare
-# filename via RuntimeRequirements SupportPath="./Resources" in
-# PackageContents.xml, which is how Autodesk's own groundforce.bundle does it.
+# marketplace/icons/ -- these are BUILD INPUTS, not shipped resources. They get
+# embedded INTO C3DFieldKit.cuix by build-cuix.ps1. AutoCAD cannot resolve CUI
+# button images from a support path -- they must live inside the .cuix package.
 #
 # Every glyph is drawn on a 32-unit design grid and scaled, so 16 and 32 px are
 # the same artwork rather than a resample. Colour encodes the ribbon panel the
@@ -15,7 +15,7 @@ $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Drawing
 
 $Root   = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
-$OutDir = Join-Path $Root 'marketplace\C3DFieldKit.bundle\Resources'
+$OutDir = Join-Path $Root 'marketplace\icons'
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 $Colors = @{
