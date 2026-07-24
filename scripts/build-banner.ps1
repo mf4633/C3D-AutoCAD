@@ -80,11 +80,28 @@ $brWhite  = New-Object System.Drawing.SolidBrush($white)
 $brMuted  = New-Object System.Drawing.SolidBrush($muted)
 $brGreen  = New-Object System.Drawing.SolidBrush($green)
 
-# green rule as a left anchor
-$g.FillRectangle($brGreen, 60, 66, 4, 68)
+# Text block origin. Shifted right by 20% of the banner width (2026-07-23).
+# Keep an eye on $TextShift vs the hydrograph, which starts at x=690 -- the
+# tagline is the widest element and will collide first.
+$TextShift = [int]($W * 0.20)
 
-$g.DrawString('HydroComplete', $fontMark, $brWhite, 82, 62)
-$g.DrawString('Stormwater analysis with every formula shown', $fontTag, $brMuted, 85, 116)
+# green rule as a left anchor
+$g.FillRectangle($brGreen, (60 + $TextShift), 66, 4, 68)
+
+$g.DrawString('HydroComplete', $fontMark, $brWhite, (82 + $TextShift), 62)
+$g.DrawString('Stormwater analysis with every formula shown', $fontTag, $brMuted, (85 + $TextShift), 116)
+
+# Warn on real overlap only. The curve originates at x=700 but hugs the
+# baseline for its first stretch, so the text may sit over that dead space
+# harmlessly. What matters is where the limb visibly departs the axis.
+$tagW    = $g.MeasureString('Stormwater analysis with every formula shown', $fontTag).Width
+$tagEnd  = [int](85 + $TextShift + $tagW)
+$riseAt  = ($curve | Where-Object { ($baseY - $_.Y) -gt 6 } | Select-Object -First 1).X
+if ($tagEnd -gt $riseAt) {
+    Write-Warning ("Tagline ends at x=$tagEnd but the hydrograph limb rises at x=$([int]$riseAt) -- they overlap.")
+} else {
+    Write-Host ("  clearance:  tagline ends x=$tagEnd, curve rises x=$([int]$riseAt) ({0} px gap)" -f [int]($riseAt - $tagEnd))
+}
 
 $bmp.Save($Out, [System.Drawing.Imaging.ImageFormat]::Png)
 $g.Dispose(); $bmp.Dispose()
