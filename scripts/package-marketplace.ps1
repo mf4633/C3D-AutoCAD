@@ -112,7 +112,7 @@ $entries += @"
       Version="1.0.0"
       AppType="LISP"
       ModuleName="./Contents/bootstrap.lsp"
-      AppDescription="Load shared C3D Field Kit helpers"
+      AppDescription="Load shared Field Kit helpers"
       LoadOnAutoCADStartup="True"
       LoadOnCommandInvocation="False" />
 "@
@@ -132,7 +132,7 @@ foreach ($cmd in $Commands.Keys) {
       AppDescription="$($info.Label)"
       LoadOnAutoCADStartup="False"
       LoadOnCommandInvocation="True">
-      <Commands GroupName="C3DFieldKit">
+      <Commands GroupName="FieldKit">
         <Command Global="$cmd" Local="$cmd" />
       </Commands>
     </ComponentEntry>
@@ -146,7 +146,7 @@ if (Test-Path (Join-Path $OutBundle "C3DFieldKit.cuix")) {
     <ComponentEntry AppName="C3DFieldKitUI"
       Version="1.0.0"
       ModuleName="./C3DFieldKit.cuix"
-      AppDescription="C3D Field Kit ribbon panel"
+      AppDescription="Field Kit ribbon panel"
       LoadOnAutoCADStartup="True"
       LoadOnCommandInvocation="False" />
 "@
@@ -155,8 +155,8 @@ if (Test-Path (Join-Path $OutBundle "C3DFieldKit.cuix")) {
 $xml = @"
 <?xml version="1.0" encoding="utf-8"?>
 <ApplicationPackage SchemaVersion="1.0"
-  Name="C3D Field Kit"
-  Description="26 production LISP macros for Civil 3D: parcel labels, bearings tables, survey labels, text tools, layers, plot-all-PDF. By the team behind HydroComplete (hydrocomplete.com/civil3d)."
+  Name="Survey &amp; Parcel Field Kit"
+  Description="26 production LISP macros for Civil 3D&#174;: parcel labels, bearings tables, survey labels, text tools, layers, plot-all-PDF. By the team behind HydroComplete (hydrocomplete.com/civil3d)."
   AppVersion="1.0.0"
   ProductCode="{717A5504-F411-4AF2-B1BD-245343975734}"
   UpgradeCode="{B7F2EEBD-775E-48E0-9F93-69C87DD17AA5}"
@@ -165,7 +165,7 @@ $xml = @"
   OnlineDocumentation="https://hydrocomplete.com/civil3d"
   Icon="./Resources/icon.png">
   <CompanyDetails Name="Michael Flynn, PE" Url="https://hydrocomplete.com" Email="support@hydrocomplete.com" />
-  <Components Description="C3D Field Kit commands">
+  <Components Description="Field Kit commands">
     <RuntimeRequirements OS="Win64" Platform="Civil3D" SeriesMin="R24.2" SeriesMax="R25.1" SupportPath="./Resources" />
 $($entries -join "")
 $cuixEntry

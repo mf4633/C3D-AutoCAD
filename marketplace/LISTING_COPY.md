@@ -51,8 +51,16 @@ actually does.
 ## App name
 
 ```
-C3D Field Kit — 26 LISP Macros for Civil 3D
+Survey & Parcel Field Kit for Civil 3D
 ```
+
+> 38 / 50 characters. Renamed 2026-07-23. Autodesk's trademark guidelines state
+> marks "should not be abbreviated or made into acronyms", so the original
+> "C3D Field Kit" was exposed on three counts: **C3D** is an acronym of the
+> Civil 3D mark, the mark was used as the brand noun rather than an adjective,
+> and the ® was missing. "for Civil 3D" is permitted referential use.
+> Use **Civil 3D®** and **AutoCAD®** at the first or most prominent mention in
+> every field.
 
 ## Subtitle / short description
 
@@ -84,12 +92,13 @@ civil 3d, autocad, lisp, survey, parcel, cogo, bearings, annotation, drafting, p
 ## Long description (fits the 4000-character field)
 
 ```
-C3D Field Kit puts 26 everyday drafting commands on a single ribbon tab, so the
-small repetitive jobs stop costing you clicks.
+Survey & Parcel Field Kit puts 26 everyday drafting commands on a single ribbon
+tab in Civil 3D®, so the small repetitive jobs stop costing you clicks.
 
 It is plain AutoLISP. No .NET, no DLLs, no Dynamo, no background service. It
 installs through the standard Autodesk autoloader — no APPLOAD, no Support File
-Search Path edits, no Trusted Locations to configure.
+Search Path edits, no Trusted Locations to configure. It runs anywhere AutoCAD®
+LISP runs, and is listed for Civil 3D.
 
 WHAT YOU GET
 
@@ -173,7 +182,7 @@ MIT — supply `LICENSE` from the repo root if the form wants a EULA file.
 
 ```
 First release. 26 drafting commands plus a FIELDKIT about command, on a
-dedicated "C3D Field Kit" ribbon tab with seven panels. Autoloader install,
+dedicated "Field Kit" ribbon tab with seven panels. Autoloader install,
 no configuration.
 ```
 
@@ -210,7 +219,7 @@ zip archive".
 Version Description:
 
 ```
-First release. 26 drafting commands plus a FIELDKIT about command, on a dedicated "C3D Field Kit" ribbon tab with seven panels: Parcel, Survey, Text, Elevation, Layers, Utilities and publisher info. Installs through the Autodesk autoloader with no configuration.
+First release. 26 drafting commands plus a FIELDKIT about command, on a dedicated "Field Kit" ribbon tab with seven panels: Parcel, Survey, Text, Elevation, Layers, Utilities and publisher info. Installs through the Autodesk autoloader with no configuration.
 ```
 
 ### App Icon
@@ -221,7 +230,7 @@ anything above 120×120).
 ### General Usage Instructions*
 
 ```
-Every command is on the C3D Field Kit ribbon tab, and every command can also be typed at the command line if that is faster for you.
+Every command is on the Field Kit ribbon tab, and every command can also be typed at the command line if that is faster for you.
 
 A typical parcel sheet: draw or import your lot polylines, run LABELACRES to tag each one with its area in acres, TOTALAREA to check the total against the plat, then BDTBL to drop a bearings-and-distances table for the lot. BD labels an individual segment where a full table is overkill.
 
@@ -241,9 +250,9 @@ Run FIELDKIT at any time for the command summary and support details.
 ```
 Installation is handled by the Autodesk App Store installer. The plug-in is placed in the Autodesk ApplicationPlugins folder as C3DFieldKit.bundle, and loads automatically the next time Civil 3D starts. No APPLOAD, no Support File Search Path entry, and no Trusted Locations setting is required.
 
-After installing, restart Civil 3D and look for the "C3D Field Kit" tab on the ribbon.
+After installing, restart Civil 3D and look for the "Field Kit" tab on the ribbon.
 
-To uninstall, use the Autodesk App Manager from inside Civil 3D, or Windows Settings > Apps, and remove "C3D Field Kit". The ribbon tab and all commands disappear on the next restart. Nothing is left in your drawings: the commands only create ordinary AutoCAD text, mtext, tables and layers, which remain valid after the plug-in is removed.
+To uninstall, use the Autodesk App Manager from inside Civil 3D, or Windows Settings > Apps, and remove "Survey & Parcel Field Kit". The ribbon tab and all commands disappear on the next restart. Nothing is left in your drawings: the commands only create ordinary AutoCAD text, mtext, tables and layers, which remain valid after the plug-in is removed.
 ```
 
 ### Support Information*
@@ -296,7 +305,7 @@ https://hydrocomplete.com/civil3d
 
 ## Screenshots (2–3, still to capture)
 
-1. The **C3D Field Kit** ribbon tab, all seven panels visible
+1. The **Field Kit** ribbon tab, all seven panels visible
 2. A parcel with `LABELACRES` output
 3. A `BDTBL` bearings table inserted on a lot
 

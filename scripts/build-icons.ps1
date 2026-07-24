@@ -1,4 +1,4 @@
-# Generate ribbon button icons for the C3D Field Kit.
+# Generate ribbon button icons for the Field Kit.
 #
 # Usage: powershell -ExecutionPolicy Bypass -File scripts/build-icons.ps1
 #

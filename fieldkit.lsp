@@ -1,6 +1,6 @@
 ;;-------------------=={ FIELDKIT }==-------------------------;;
 ;;                                                            ;;
-;;  About / support info for the C3D Field Kit. Prints the    ;;
+;;  About / support info for the Field Kit. Prints the    ;;
 ;;  command list summary and offers to open the publisher      ;;
 ;;  page in the default browser.                              ;;
 ;;------------------------------------------------------------;;
@@ -14,7 +14,7 @@
 (defun c:FIELDKIT (/ ans url)
   (setq url "https://hydrocomplete.com/civil3d")
   (princ "\n")
-  (princ "\nC3D Field Kit  v1.0")
+  (princ "\nSurvey & Parcel Field Kit  v1.0")
   (princ "\n26 field macros for Civil 3D / AutoCAD - parcels, bearings,")
   (princ "\nsurvey labels, text, elevations, layers, plot-all-PDF.")
   (princ "\n")

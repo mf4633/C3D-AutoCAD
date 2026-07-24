@@ -21,7 +21,14 @@
 #   - every panel ends with a RibbonPanelBreak
 #   - the tab carries an Alias (ID_TAB*), which is how workspaces reference it
 #
-# Builds a dedicated "C3D Field Kit" tab (WorkspaceBehavior=MergeOrAddTab)
+# NAMING (2026-07-23): Autodesk's trademark guidelines say marks "should not be
+# abbreviated or made into acronyms", so "C3D" -- an acronym of Civil 3D -- is
+# out of all user-facing text. Ribbon tab is "Field Kit"; the listing is
+# "Survey & Parcel Field Kit for Civil 3D", which uses the mark referentially.
+# ElementIDs and MacroIDs deliberately KEEP the C3DFK_ prefix: they are internal
+# identifiers, never shown, and changing them orphans the workspace merge.
+#
+# Builds a dedicated "Field Kit" tab (WorkspaceBehavior=MergeOrAddTab)
 # rather than panels on the Plug-Ins tab, because merging into ACAD's base
 # workspace from outside AutoCAD is fragile. CUI_BUILD_NOTES.md documents this
 # as the design and explains what to do if review asks for Plug-Ins placement.
@@ -106,7 +113,7 @@ if (Test-Path $OutFile) { Remove-Item $OutFile -Force }
 # so seed the file first, then reopen it to populate.
 $cs = New-Object Autodesk.AutoCAD.Customization.CustomizationSection
 $cs.MenuGroupName = $GroupName
-$cs.MenuGroupDisplayName = 'C3D Field Kit'
+$cs.MenuGroupDisplayName = 'Field Kit'
 $cs.SaveAs($OutFile) | Out-Null
 
 $cs = New-Object Autodesk.AutoCAD.Customization.CustomizationSection($OutFile)
@@ -114,7 +121,7 @@ $mg = $cs.MenuGroup
 if (-not $mg) { throw "MenuGroup still null after seed+reopen -- cannot continue." }
 
 # --- Macros -------------------------------------------------------------
-$macroGroup = New-Object Autodesk.AutoCAD.Customization.MacroGroup('C3D Field Kit', $mg)
+$macroGroup = New-Object Autodesk.AutoCAD.Customization.MacroGroup('Field Kit', $mg)
 $macros = @{}
 foreach ($p in $Panels) {
     foreach ($c in $p.Cmds) {
@@ -136,7 +143,7 @@ $panelIds = @()
 
 foreach ($p in $Panels) {
     $panel = New-Object Autodesk.AutoCAD.Customization.RibbonPanelSource($ribbonRoot)
-    $panel.Name = "C3D Field Kit - $($p.Name)"
+    $panel.Name = "Field Kit - $($p.Name)"
     $panel.Text = $p.Name
     # STABLE ElementID. Left to itself the API mints a fresh random UID
     # (RBNU_242_xxxxx) on every build. AutoCAD merges the tab into the user's
@@ -174,8 +181,8 @@ foreach ($p in $Panels) {
 
 # --- Tab ----------------------------------------------------------------
 $tab = New-Object Autodesk.AutoCAD.Customization.RibbonTabSource($ribbonRoot)
-$tab.Name = 'C3D Field Kit'
-$tab.Text = 'C3D Field Kit'
+$tab.Name = 'Field Kit'
+$tab.Text = 'Field Kit'
 $tab.KeyTip = 'CFK'
 $tab.ElementID = 'ID_TAB_C3DFIELDKIT'   # stable -- see the panel comment above
 $tab.DefaultDisplay = [Autodesk.AutoCAD.Customization.DefaultDisplay]::AddToWorkspace
