@@ -101,21 +101,21 @@ Parcel
   BDTBL       insert a bearings-and-distances table for a lot
 
 Survey
-  NE          label a point with its northing and easting
-  ZL          label an object's elevation
-  CENTROID    mark the centre of a closed shape
-  SLP         label the slope between two points
+  NE          repeating northing/easting label at picked points
+  ZL          repeating elevation label at picked points
+  CENTROID    place a point at the bounding-box centre of a closed shape
+  SLP         label slope between two picked points: percent, H:V and dv/dh
 
 Text
   MAKEUPPER / MAKELOWER / TITLECASE   case-fold text and mtext, leaving inline
                                       formatting codes intact
   CTH         change text height across a selection
-  TROT        rotate text to a chosen angle
-  SCALETXT    scale text about its own insertion point
-  T2M         convert text to mtext
+  TROT        flip upside-down text 180 degrees so it reads right-side up
+  SCALETXT    scale text in place without moving its insertion point
+  T2M         convert text to mtext, keeping height, style and rotation
 
 Elevation
-  FLAT        flatten a selection to a single Z
+  FLAT        flatten a selection to Z=0 in place
   CHZ         change the Z of selected objects
   GETZ        read the Z of a picked object
 
@@ -227,7 +227,7 @@ A typical parcel sheet: draw or import your lot polylines, run LABELACRES to tag
 
 A typical survey cleanup: NE to label northings and eastings, ZL for elevations, SLP for slope between two points, CENTROID to mark the middle of a closed shape.
 
-Text cleanup before issue: MAKEUPPER, MAKELOWER or TITLECASE to normalise case across a selection, CTH to bring text heights into line, SCALETXT and TROT for size and rotation, T2M to convert legacy text to mtext.
+Text cleanup before issue: MAKEUPPER, MAKELOWER or TITLECASE to normalise case across a selection, CTH to bring text heights into line, SCALETXT to resize without shifting insertion points, TROT to flip any upside-down labels right-side up, T2M to convert legacy text to mtext.
 
 Before sending a drawing out: FLAT to drop everything to a single elevation, PA to audit and purge, then PLT to plot every layout to one PDF next to the DWG.
 
@@ -271,15 +271,17 @@ Built by the team behind HydroComplete, stormwater analysis driven straight from
 ### Known Issues
 
 ```
-BD and BDTBL read polylines and lines. They do not read Civil 3D parcel objects or alignment stationing, so a bearings table built from a parcel's display geometry will not update if the parcel is later edited.
+BD and BDTBL read polylines and lines, not Civil 3D parcel objects or alignment stationing, so a table built from a parcel's display geometry will not update if the parcel is later edited.
 
-FLAT does not handle 3DPOLY, 3DFACE, MESH or SURFACE entities. Explode those before running it.
+FLAT flattens to Z=0 specifically, not to a chosen elevation - use CHZ for that. It does not handle 3DPOLY, 3DFACE, MESH or SURFACE; explode those first.
 
-PLT requires the drawing to have been saved, because it writes the PDF beside the DWG. It uses each layout's own page setup, so set page size, scale and plot area per layout first.
+PLT requires the drawing to have been saved, as it writes the PDF beside the DWG. Each layout uses its own page setup, so set page size, scale and plot area first.
+
+CENTROID places its point at the bounding-box centre, not the true area centroid. For an irregular parcel those differ.
 
 LDEL skips locked layers, since AutoCAD's ERASE ignores them silently. Unlock the layer first.
 
-Area and length commands measure the geometry as drawn. They do not apply a drawing scale factor.
+Area and length commands measure geometry as drawn; no drawing scale factor is applied.
 
 Tested on Civil 3D 2023 and 2026. 2024 and 2025 fall inside the supported range and use the same AutoLISP interfaces, but were not separately exercised.
 ```

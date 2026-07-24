@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="C3D Field Kit">
+
+<clipPath id="plate512_0_0"><rect x="0.00" y="0.00" width="512.00" height="512.00" rx="112.64"/></clipPath>
+<rect x="0.00" y="0.00" width="512.00" height="512.00" rx="112.64" fill="#0D1B2A"/>
+<g clip-path="url(#plate512_0_0)" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="2.56">
+<line x1="64.00" y1="0.00" x2="64.00" y2="512.00"/>
+<line x1="0.00" y1="64.00" x2="512.00" y2="64.00"/>
+<line x1="128.00" y1="0.00" x2="128.00" y2="512.00"/>
+<line x1="0.00" y1="128.00" x2="512.00" y2="128.00"/>
+<line x1="192.00" y1="0.00" x2="192.00" y2="512.00"/>
+<line x1="0.00" y1="192.00" x2="512.00" y2="192.00"/>
+<line x1="256.00" y1="0.00" x2="256.00" y2="512.00"/>
+<line x1="0.00" y1="256.00" x2="512.00" y2="256.00"/>
+<line x1="320.00" y1="0.00" x2="320.00" y2="512.00"/>
+<line x1="0.00" y1="320.00" x2="512.00" y2="320.00"/>
+<line x1="384.00" y1="0.00" x2="384.00" y2="512.00"/>
+<line x1="0.00" y1="384.00" x2="512.00" y2="384.00"/>
+<line x1="448.00" y1="0.00" x2="448.00" y2="512.00"/>
+<line x1="0.00" y1="448.00" x2="512.00" y2="448.00"/>
+</g>
+<g stroke="#4FB67A" stroke-opacity="0.6" stroke-width="13.31" stroke-linecap="round">
+<line x1="46.08" y1="245.76" x2="465.92" y2="245.76"/>
+<line x1="261.12" y1="46.08" x2="261.12" y2="465.92"/>
+</g>
+<polygon points="81.92,235.52 194.56,92.16 419.84,153.60 389.12,368.64 174.08,419.84" fill="none" stroke="#F4F8FA" stroke-width="38.91" stroke-linejoin="round"/>
+<circle cx="261.12" cy="245.76" r="51.20" fill="none" stroke="#4FB67A" stroke-width="24.58"/>
+<circle cx="261.12" cy="245.76" r="16.38" fill="#4FB67A"/>
+</svg>
