@@ -166,7 +166,7 @@ $xml = @"
   Icon="./Resources/icon.png">
   <CompanyDetails Name="Michael Flynn, PE" Url="https://hydrocomplete.com" Email="support@hydrocomplete.com" />
   <Components Description="C3D Field Kit commands">
-    <RuntimeRequirements OS="Win64" Platform="Civil3D" SeriesMin="R24.2" SeriesMax="R25.1" />
+    <RuntimeRequirements OS="Win64" Platform="Civil3D" SeriesMin="R24.2" SeriesMax="R25.1" SupportPath="./Resources" />
 $($entries -join "")
 $cuixEntry
   </Components>

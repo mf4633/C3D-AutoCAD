@@ -119,8 +119,14 @@ $macros = @{}
 foreach ($p in $Panels) {
     foreach ($c in $p.Cmds) {
         # ^C^C cancels any in-progress command before invoking.
-        $macros[$c.Cmd] = New-Object Autodesk.AutoCAD.Customization.MenuMacro(
+        $m = New-Object Autodesk.AutoCAD.Customization.MenuMacro(
             $macroGroup, $c.Label, "^C^C$($c.Cmd)", "C3DFK_$($c.Cmd)")
+        # Icons are NOT set here -- see Set-CuixIcons below. Macro.SmallImage /
+        # LargeImage throw NullReferenceException out-of-process (the setter
+        # reaches for an image cache that only exists inside a running AutoCAD),
+        # as do both image-carrying constructors. They are patched into the
+        # saved file instead.
+        $macros[$c.Cmd] = $m
     }
 }
 
@@ -186,6 +192,46 @@ foreach ($panelId in $panelIds) {
 
 $cs.Save() | Out-Null
 
+# --- Patch icon references into the saved file --------------------------
+# Macro.SmallImage/LargeImage cannot be set through AcCui out-of-process: the
+# setter and both image-carrying constructors throw NullReferenceException,
+# because they resolve the bitmap through a cache that only exists inside a
+# running AutoCAD. The generator already emits empty <SmallImage Name="" /> and
+# <LargeImage Name="" /> elements, and Autodesk's own files fill exactly that
+# attribute, so patch the saved package directly. A .cuix is an OPC zip.
+function Set-CuixIcons {
+    param([string]$CuixPath, [string]$IconDirName)
+
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $work = Join-Path (Split-Path -Parent $CuixPath) '_cuix_icon_work'
+    if (Test-Path $work) { Remove-Item -LiteralPath $work -Recurse -Force }
+    [System.IO.Compression.ZipFile]::ExtractToDirectory($CuixPath, $work)
+
+    $menuPath = Join-Path $work 'MenuGroup.cui'
+    [xml]$doc = Get-Content -LiteralPath $menuPath -Raw
+    $patched = 0
+    foreach ($mm in $doc.GetElementsByTagName('MenuMacro')) {
+        $uid = $mm.GetAttribute('UID')
+        if ($uid -notlike 'C3DFK_*') { continue }
+        $cmd = $uid.Substring(6).ToLower()
+        foreach ($pair in @(@('SmallImage', 16), @('LargeImage', 32))) {
+            $node = $mm.GetElementsByTagName($pair[0]) | Select-Object -First 1
+            if ($node) {
+                $node.SetAttribute('Name', ("c3dfk_{0}_{1}.png" -f $cmd, $pair[1]))
+                $patched++
+            }
+        }
+    }
+    $doc.Save($menuPath)
+
+    [System.IO.File]::Delete($CuixPath)
+    [System.IO.Compression.ZipFile]::CreateFromDirectory($work, $CuixPath)
+    Remove-Item -LiteralPath $work -Recurse -Force
+    return $patched
+}
+
+$patchedRefs = Set-CuixIcons -CuixPath $OutFile -IconDirName 'Resources'
+
 # --- Verify by reopening ------------------------------------------------
 $check = New-Object Autodesk.AutoCAD.Customization.CustomizationSection($OutFile)
 $cmg   = $check.MenuGroup
@@ -222,4 +268,26 @@ if ($unstable.Count -gt 0) {
     throw "Verification FAILED -- $($unstable.Count) element(s) have auto-generated IDs: $(($unstable | ForEach-Object { $_.ElementID }) -join ', ')"
 }
 Write-Host "  stable IDs:    OK (panels ID_C3DFK_PANEL_*, tab ID_TAB_C3DFIELDKIT)"
+
+# Read the icon references back out of the rezipped package and confirm every
+# one names a file that actually exists -- a dangling reference renders a blank
+# button with no error anywhere.
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+$iconDir = Join-Path $Root 'marketplace\C3DFieldKit.bundle\Resources'
+$zip = [System.IO.Compression.ZipFile]::OpenRead($OutFile)
+try {
+    $entry  = $zip.Entries | Where-Object { $_.Name -eq 'MenuGroup.cui' }
+    $reader = New-Object System.IO.StreamReader($entry.Open())
+    $menuXml = $reader.ReadToEnd(); $reader.Close()
+} finally { $zip.Dispose() }
+
+$named = [regex]::Matches($menuXml, '<(?:Small|Large)Image Name="([^"]+)"')
+$missing = @($named | ForEach-Object { $_.Groups[1].Value } | Where-Object { -not (Test-Path (Join-Path $iconDir $_)) })
+if ($named.Count -ne 54) {
+    throw "Verification FAILED -- $($named.Count) icon references in the package, expected 54 (27 commands x small+large)."
+}
+if ($missing.Count -gt 0) {
+    throw "Verification FAILED -- $($missing.Count) dangling icon reference(s): $(($missing | Select-Object -First 6) -join ', ') -- run scripts/build-icons.ps1"
+}
+Write-Host "  icons:         OK ($($named.Count) references, all resolve on disk)"
 Write-Host "Verification passed."
