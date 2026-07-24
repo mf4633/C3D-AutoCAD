@@ -37,6 +37,7 @@ forward by newer AutoCAD on load.
 | `MenuMacroReference` and `DisplayName` are **read-only** | A button binds to its macro through `MacroID` only; `DisplayName` is derived from the macro's name, which is why macros are created with the button label as their name |
 | `CustomizationSection` has no `MenuGroup` until named **and saved** | The script seeds the file, then reopens it before populating |
 | `$pid` is a read-only PowerShell automatic variable | Using it as a loop variable is a hard error |
+| Panels and tabs get a **fresh random `ElementID`** on every build unless you set one | AutoCAD merges a tab into the workspace **by ID**. New IDs orphan the previous merge and the ribbon **silently stops rendering** — on every rebuild locally, and for every customer on upgrade. Set stable IDs (`ID_C3DFK_PANEL_*`, `ID_TAB_C3DFIELDKIT`), as Autodesk does (`ID_PanelSharedViews`) |
 
 ---
 
@@ -123,8 +124,13 @@ Order of diagnosis:
    `PackageContents.xml` is UTF-8 **without BOM**.
 2. **Commands work, no tab** → the CUIX `ComponentEntry` is missing, or the
    panel/tab was dropped on save (see the registration trap above).
-3. **Tab appears but the panel is truncated** → too many buttons per row.
-4. **Still nothing** → check the `APPAUTOLOAD` system variable; it gates
+3. **Tab appeared once, then vanished after a rebuild** → orphaned workspace
+   merge from changed `ElementID`s. Confirm the CUIX still has stable IDs, then
+   force a re-merge: `CUILOAD` → unload `C3DFIELDKIT` → OK → restart Civil 3D.
+   A structurally perfect CUIX looks exactly like a broken one in this state, so
+   check IDs before suspecting the file.
+4. **Tab appears but the panel is truncated** → too many buttons per row.
+5. **Still nothing** → check the `APPAUTOLOAD` system variable; it gates
    autoloading entirely.
 
 ---
