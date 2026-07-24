@@ -187,6 +187,111 @@ Autodesk builds the MSI installer from an autoloader bundle — you do **not** n
 to supply your own `.exe`/`.msi`. `marketplace/installer/C3DFieldKit.iss` is kept
 only for local testing and the Gumroad channel.
 
+## Step 1 form — the remaining fields
+
+### Publisher Privacy Policy
+
+```
+https://hydrocomplete.com/privacy.html
+```
+
+### App File
+
+Upload `dist/C3DFieldKit_v1_bundle.zip`. It already contains
+`Help/quickstart.html`, which satisfies "include application and help file in a
+zip archive".
+
+### App Version
+
+| Field | Value |
+|-------|-------|
+| Version Number | `1.0.0` |
+
+Version Description:
+
+```
+First release. 26 drafting commands plus a FIELDKIT about command, on a dedicated "C3D Field Kit" ribbon tab with seven panels: Parcel, Survey, Text, Elevation, Layers, Utilities and publisher info. Installs through the Autodesk autoloader with no configuration.
+```
+
+### App Icon
+
+`marketplace/C3DFieldKit.bundle/Resources/icon.png` (256×256 — the form scales
+anything above 120×120).
+
+### General Usage Instructions*
+
+```
+Every command is on the C3D Field Kit ribbon tab, and every command can also be typed at the command line if that is faster for you.
+
+A typical parcel sheet: draw or import your lot polylines, run LABELACRES to tag each one with its area in acres, TOTALAREA to check the total against the plat, then BDTBL to drop a bearings-and-distances table for the lot. BD labels an individual segment where a full table is overkill.
+
+A typical survey cleanup: NE to label northings and eastings, ZL for elevations, SLP for slope between two points, CENTROID to mark the middle of a closed shape.
+
+Text cleanup before issue: MAKEUPPER, MAKELOWER or TITLECASE to normalise case across a selection, CTH to bring text heights into line, SCALETXT and TROT for size and rotation, T2M to convert legacy text to mtext.
+
+Before sending a drawing out: FLAT to drop everything to a single elevation, PA to audit and purge, then PLT to plot every layout to one PDF next to the DWG.
+
+Layer work throughout: LI and LUI to isolate and unisolate, LDEL to remove a layer and its contents, BC to count blocks by effective name.
+
+Run FIELDKIT at any time for the command summary and support details.
+```
+
+### Installation/Uninstallation*
+
+```
+Installation is handled by the Autodesk App Store installer. The plug-in is placed in the Autodesk ApplicationPlugins folder as C3DFieldKit.bundle, and loads automatically the next time Civil 3D starts. No APPLOAD, no Support File Search Path entry, and no Trusted Locations setting is required.
+
+After installing, restart Civil 3D and look for the "C3D Field Kit" tab on the ribbon.
+
+To uninstall, use the Autodesk App Manager from inside Civil 3D, or Windows Settings > Apps, and remove "C3D Field Kit". The ribbon tab and all commands disappear on the next restart. Nothing is left in your drawings: the commands only create ordinary AutoCAD text, mtext, tables and layers, which remain valid after the plug-in is removed.
+```
+
+### Support Information*
+
+```
+Email support@hydrocomplete.com. Please include your Civil 3D version, the command name, and what you did immediately before the problem.
+
+Support is provided by the developer directly, Monday to Friday, US Eastern time. Most questions are answered within two business days.
+
+This plug-in is MIT licensed and its full source is public at https://github.com/mf4633/C3D-AutoCAD, so you are also free to read the code, file an issue, or fix something yourself.
+```
+
+### Additional Information
+
+```
+Drawing units are assumed to be US survey feet. Area labels convert square feet to acres at 43560 sf/ac. For metric drawings, change SQFT_PER_ACRE in the source and reload.
+
+The routines are plain AutoLISP. There is no .NET assembly, no ObjectARX module, no background process and no network access of any kind. Nothing is transmitted anywhere.
+
+Licence: MIT. Install and modify on any number of machines. Source: https://github.com/mf4633/C3D-AutoCAD
+
+Built by the team behind HydroComplete, stormwater analysis driven straight from your Civil 3D drawing: https://hydrocomplete.com/civil3d
+```
+
+### Known Issues
+
+```
+BD and BDTBL read polylines and lines. They do not read Civil 3D parcel objects or alignment stationing, so a bearings table built from a parcel's display geometry will not update if the parcel is later edited.
+
+FLAT does not handle 3DPOLY, 3DFACE, MESH or SURFACE entities. Explode those before running it.
+
+PLT requires the drawing to have been saved, because it writes the PDF beside the DWG. It uses each layout's own page setup, so set page size, scale and plot area per layout first.
+
+LDEL skips locked layers, since AutoCAD's ERASE ignores them silently. Unlock the layer first.
+
+Area and length commands measure the geometry as drawn. They do not apply a drawing scale factor.
+
+Tested on Civil 3D 2023 and 2026. 2024 and 2025 fall inside the supported range and use the same AutoLISP interfaces, but were not separately exercised.
+```
+
+### Learn More Url
+
+```
+https://hydrocomplete.com/civil3d
+```
+
+---
+
 ## Screenshots (2–3, still to capture)
 
 1. The **C3D Field Kit** ribbon tab, all seven panels visible
