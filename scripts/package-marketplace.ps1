@@ -145,6 +145,7 @@ if (Test-Path (Join-Path $OutBundle "HydroCompleteFieldKit.cuix")) {
 
     <ComponentEntry AppName="HydroCompleteFieldKitUI"
       Version="1.0.0"
+      AppType="CUIX"
       ModuleName="./HydroCompleteFieldKit.cuix"
       AppDescription="Field Kit ribbon panel"
       LoadOnAutoCADStartup="True"

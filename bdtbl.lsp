@@ -11,7 +11,7 @@
 ;;  metes-and-bounds work.                                    ;;
 ;;------------------------------------------------------------;;
 ;;  Author:   Michael Flynn                                   ;;
-;;  Version:  1.1  -  2026-07-07                              ;;
+;;  Version:  1.2  -  2026-08-25                              ;;
 ;;  Command:  BDTBL                                           ;;
 ;;  Args:     pick a polyline, then an insertion point        ;;
 ;;  Requires: _utils.lsp (c3d:az->bearing)                    ;;
@@ -64,6 +64,18 @@
                             3                   ; columns
                             (* th 1.5)
                             (* th 8.0)))
+  ;; AddTable sizes rows/columns from TH but cell text stays at the table
+  ;; style's default (0.18 for Standard) -- at survey text sizes the table
+  ;; looks empty. Set text height explicitly for every row type.
+  ;; AcRowType: acDataRow = 1, acTitleRow = 2, acHeaderRow = 4.
+  (vla-SetTextHeight tbl 2 (* th 1.1))
+  (vla-SetTextHeight tbl 4 th)
+  (vla-SetTextHeight tbl 1 th)
+  ;; Default equal column widths wrap the bearing string; size each column
+  ;; to its content instead (LINE / BEARING / DISTANCE).
+  (vla-SetColumnWidth tbl 0 (* th 4.0))
+  (vla-SetColumnWidth tbl 1 (* th 14.0))
+  (vla-SetColumnWidth tbl 2 (* th 7.0))
   (vla-SetText tbl 0 0 "BEARINGS AND DISTANCES")
   (vla-SetText tbl 1 0 "LINE")
   (vla-SetText tbl 1 1 "BEARING")

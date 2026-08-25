@@ -214,10 +214,21 @@ Do **not** claim COGO alignment / parcel fabric integration you don't have.
 
 ## Pre-submission test matrix
 
-Bundle is already staged at `%ProgramData%\Autodesk\ApplicationPlugins\HydroCompleteFieldKit.bundle`
-(2026-07-23) — the same path the installer targets. Restart Civil 3D to test.
-Run the matrix against **2023 and 2026**, the two installed endpoints of the
-declared range.
+**Autoload verified 2026-08-25 on both endpoints** (fresh instances, script-probed):
+Civil 3D 2023 and 2026 both load the bundle — CUIX menugroup registered and
+`bootstrap.lsp` executed at startup — from
+`%APPDATA%\Autodesk\ApplicationPlugins\HydroCompleteFieldKit.bundle` (per-user),
+which is where the bundle is now staged locally and where store-built MSIs install.
+
+**Location gotcha found 2026-08-25:** Civil 3D **2026 on this machine ignores
+`%ProgramData%\Autodesk\ApplicationPlugins` entirely** (a minimal probe bundle
+didn't load either; 2023 loads from both locations). The 7/23 "loaded in 2026"
+observations were masked by manual CUILOAD/profile persistence. Always stage and
+test in the per-user path. Same-day fixes shipped into the bundle: `AppType="CUIX"`
+on the CUIX ComponentEntry (schema conformance; not load-critical in either
+version), ASCII-only `bootstrap.lsp` banner (UTF-8 em dash mojibakes through the
+ANSI LISP reader), and forward-slash entry names in the .cuix OPC zip.
+The 2023/2026 ribbon-tab visual check in a GUI session remains worth one look.
 
 | Test | Pass criteria |
 |------|---------------|

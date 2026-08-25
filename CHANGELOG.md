@@ -6,6 +6,20 @@ Versions follow [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Fixed
+- `BDTBL` inserted tables whose cell text was invisible at survey scale:
+  `vla-AddTable` sizes rows and columns from the drawing text height, but cell
+  text stayed at the table style's default (0.18 for Standard), so with
+  `TEXTSIZE` at plan-scale values the table rendered as empty cells. Text
+  height is now set explicitly per row type, and columns are sized to their
+  content (LINE / BEARING / DISTANCE) so bearings no longer wrap.
+- `bootstrap.lsp` load banner contained a UTF-8 em dash in a BOM-less file;
+  AutoCAD reads LISP in the ANSI codepage, so the banner printed mojibake.
+  Shipped LISP is now pure ASCII.
+- The generated `.cuix` stored its `_rels\.rels` OPC part with a backslash
+  entry name (a .NET Framework `ZipFile::CreateFromDirectory` artifact);
+  entry names are normalized to forward slashes per the OPC spec.
+- The Marketplace bundle's CUIX `ComponentEntry` now declares
+  `AppType="CUIX"` (schema conformance).
 - `BC` counted dynamic and anonymous block inserts under their internal
   `*U###` names, scattering one logical block across many aliases. It now reads
   `EffectiveName` (falling back to DXF 2) so instances group under the real

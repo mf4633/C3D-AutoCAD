@@ -91,14 +91,39 @@ civil 3d, autocad, lisp, survey, parcel, cogo, bearings, annotation, drafting, p
 
 ## Long description (fits the 4000-character field)
 
+> Expanded 2026-08-25 in response to Marketplace review feedback ("description
+> is too short … should include a detailed description … advantages and
+> benefits"). Same facts, plus an explicit WHY THIS KIT section. Still every
+> claim matches what the bundle actually does.
+
 ```
 Survey & Parcel Field Kit puts 26 everyday drafting commands on a single ribbon
-tab in Civil 3D®, so the small repetitive jobs stop costing you clicks.
+tab in Civil 3D®, so the small repetitive jobs — parcel areas, bearings tables,
+coordinate and elevation labels, text cleanup, layer chores, plotting — stop
+costing you clicks.
 
-It is plain AutoLISP. No .NET, no DLLs, no Dynamo, no background service. It
-installs through the standard Autodesk autoloader — no APPLOAD, no Support File
-Search Path edits, no Trusted Locations to configure. It runs anywhere AutoCAD®
-LISP runs, and is listed for Civil 3D.
+WHY THIS KIT
+
+Zero-configuration install. The kit ships as a standard Autodesk autoloader
+bundle. No APPLOAD, no Support File Search Path edits, no Trusted Locations to
+configure. Install, restart Civil 3D, and the Field Kit tab is on the ribbon
+with seven panels: Parcel, Survey, Text, Elevation, Layers and Utilities.
+
+Nothing to break. Every routine is plain AutoLISP — no .NET assemblies, no
+DLLs, no Dynamo graphs, no background services. LISP has run essentially
+unchanged in AutoCAD® for decades, so the kit is not tied to one release and
+survives your next version upgrade.
+
+Nothing hidden. The kit is MIT licensed and its full source is public, so you
+or your CAD manager can read exactly what every command does before deploying
+it. It makes no network connections and transmits nothing, anywhere.
+
+Works the way you already draft. Every command is a ribbon button AND a short
+typed command (LABELACRES, BDTBL, PLT ...), so it fits existing muscle memory
+instead of fighting it. Run FIELDKIT at any time for the full command summary
+and support details.
+
+Free. No trial period, no registration, no locked features.
 
 WHAT YOU GET
 

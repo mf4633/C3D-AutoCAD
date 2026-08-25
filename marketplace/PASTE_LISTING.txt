@@ -1,19 +1,52 @@
-PASTE-READY LISTING TEXT - C3D Field Kit v1.0.0
-Pure ASCII, no markdown. Paste directly into the Autodesk portal fields.
+PASTE-READY LISTING TEXT - Survey & Parcel Field Kit for Civil 3D, v1.0.0
+Regenerated 2026-08-25 after Marketplace review feedback (description length).
+UTF-8: contains the (R) symbol and em dashes, which the portal accepts.
+Trademark rule: never "C3D" in any user-facing field; "for Civil 3D" is
+permitted referential use; Civil 3D(R) / AutoCAD(R) at first mention.
+
+============================================================
+APP NAME  (38/50 characters)
+============================================================
+
+Survey & Parcel Field Kit for Civil 3D
 
 ============================================================
 SHORT DESCRIPTION  (subtitle field)
 ============================================================
 
-Plain AutoLISP, no DLLs. 26 one-command fixes for the small repetitive jobs: parcel areas, bearings tables, N/E and elevation labels, text case, layer chores.
+Parcel labels, bearings tables, coordinate and slope labels, text cleanup, layer chores and plot-all-to-PDF — 26 everyday drafting commands on one ribbon tab.
 
 ============================================================
-LONG DESCRIPTION  (2782 characters)
+LONG DESCRIPTION  (~3,680 of 4,000 characters)
 ============================================================
 
-C3D Field Kit puts 26 everyday drafting commands on a single ribbon tab, so the small repetitive jobs stop costing you clicks.
+Survey & Parcel Field Kit puts 26 everyday drafting commands on a single ribbon
+tab in Civil 3D®, so the small repetitive jobs — parcel areas, bearings tables,
+coordinate and elevation labels, text cleanup, layer chores, plotting — stop
+costing you clicks.
 
-It is plain AutoLISP. No .NET, no DLLs, no Dynamo, no background service. It installs through the standard Autodesk autoloader  -  no APPLOAD, no Support File Search Path edits, no Trusted Locations to configure. Full source is included and public.
+WHY THIS KIT
+
+Zero-configuration install. The kit ships as a standard Autodesk autoloader
+bundle. No APPLOAD, no Support File Search Path edits, no Trusted Locations to
+configure. Install, restart Civil 3D, and the Field Kit tab is on the ribbon
+with seven panels: Parcel, Survey, Text, Elevation, Layers and Utilities.
+
+Nothing to break. Every routine is plain AutoLISP — no .NET assemblies, no
+DLLs, no Dynamo graphs, no background services. LISP has run essentially
+unchanged in AutoCAD® for decades, so the kit is not tied to one release and
+survives your next version upgrade.
+
+Nothing hidden. The kit is MIT licensed and its full source is public, so you
+or your CAD manager can read exactly what every command does before deploying
+it. It makes no network connections and transmits nothing, anywhere.
+
+Works the way you already draft. Every command is a ribbon button AND a short
+typed command (LABELACRES, BDTBL, PLT ...), so it fits existing muscle memory
+instead of fighting it. Run FIELDKIT at any time for the full command summary
+and support details.
+
+Free. No trial period, no registration, no locked features.
 
 WHAT YOU GET
 
@@ -53,23 +86,26 @@ Utilities
   PA          audit and purge, three passes
   ZO          zoom to selected objects
 
-Every command also runs from the command line, and FIELDKIT prints the full list with support details at any time.
-
 NOTES AND LIMITATIONS
 
-Drawing units are assumed to be US survey feet. Area labels convert square feet to acres at 43560 sf/ac. For metric drawings, change SQFT_PER_ACRE in the source to 4046.856.
+Drawing units are assumed to be US survey feet. Area labels convert square feet
+to acres at 43560 sf/ac. For metric drawings, change SQFT_PER_ACRE in the source
+to 4046.856.
 
-BD and BDTBL operate on polylines and lines. They do not read Civil 3D parcel objects or alignment stationing.
+BD and BDTBL operate on polylines and lines. They do not read Civil 3D parcel
+objects or alignment stationing.
 
-FLAT does not handle 3DPOLY, 3DFACE, MESH or SURFACE  -  explode those first.
+FLAT does not handle 3DPOLY, 3DFACE, MESH or SURFACE — explode those first.
 
 PLT requires the drawing to be saved, and writes the PDF beside the DWG.
 
 LICENCE
 
-MIT. Install and modify on any number of machines. Full source is public at github.com/mf4633/C3D-AutoCAD.
+MIT. Install and modify on any number of machines. Full source is public at
+github.com/mf4633/C3D-AutoCAD.
 
 WHO MADE IT
 
-Built by the team behind HydroComplete  -  stormwater analysis driven straight from your Civil 3D drawing, with full formula transparency.
+Built by the team behind HydroComplete — stormwater analysis driven straight
+from your Civil 3D drawing, with full formula transparency.
 https://hydrocomplete.com/civil3d
