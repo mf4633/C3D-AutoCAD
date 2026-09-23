@@ -102,7 +102,7 @@ https://github.com/mf4633/C3D-AutoCAD
 ```
 
 **Notes:**
-- LinkedIn's algorithm rewards posts that get comments in the first hour. Tag 1-2 colleagues you know would use it (Kim Kennedy, Daniel Bookhart, anyone in the McGill survey/drainage group), or any non-McGill civil-engineering contact.
+- LinkedIn's algorithm rewards posts that get comments in the first hour. Tag 1-2 civil-engineering contacts you know would actually use it.
 - A demo GIF in the post itself outperforms a link by ~3x on LinkedIn — upload `demo.gif` as a native attachment.
 - LinkedIn truncates after ~210 characters before "...see more"; first two lines should hook.
 - Recommended post time: Tuesday-Thursday 7-9 AM ET.
